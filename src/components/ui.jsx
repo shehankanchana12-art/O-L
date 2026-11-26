@@ -1,11 +1,47 @@
-export function Slider({ label, value, onChange, min, max, step = 1, unit = '', display }) {
+import { useEffect, useState } from 'react'
+
+export function Slider({ label, value, onChange, min, max, step = 1, unit = '' }) {
+  // අතින් ටයිප් කරන අගය — අගුළු දමන තෙක් ටයිප් කරන පෙළ එලෙසම තබා ගනී
+  const [text, setText] = useState(String(value))
+  const [editing, setEditing] = useState(false)
+
+  useEffect(() => {
+    if (!editing) setText(String(value))
+  }, [value, editing])
+
+  const applyTyped = (raw) => {
+    const n = Number(raw)
+    if (raw.trim() === '' || !Number.isFinite(n)) return
+    // ස්ලයිඩරයේ සීමා නොසලකා ටයිප් කළ අගය එලෙසම යොදයි
+    onChange(n)
+  }
+
   return (
     <label className="block">
-      <span className="flex items-baseline justify-between gap-2 text-[13px] font-semibold text-slate-600">
-        <span>{label}</span>
-        <span className="rounded-lg bg-slate-100 px-2 py-0.5 font-mono text-[12px] text-ink">
-          {display ?? value}
-          {unit}
+      <span className="flex items-center justify-between gap-2 text-[13px] font-semibold text-slate-600">
+        <span className="min-w-0 leading-snug">{label}</span>
+        <span className="flex shrink-0 items-center gap-1">
+          <input
+            type="text"
+            inputMode="decimal"
+            value={text}
+            onChange={(e) => {
+              const raw = e.target.value
+              setText(raw)
+              applyTyped(raw)
+            }}
+            onFocus={() => setEditing(true)}
+            onBlur={() => {
+              setEditing(false)
+              setText(String(value))
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') e.currentTarget.blur()
+            }}
+            aria-label={`${label} — අගය ටයිප් කරන්න`}
+            className="w-[4.75rem] rounded-lg border border-slate-300 bg-white px-1.5 py-1 text-right font-mono text-[12px] font-normal text-ink outline-none focus:border-leaf-500 focus:ring-2 focus:ring-leaf-100"
+          />
+          {unit.trim() ? <span className="font-mono text-[11px] font-normal text-slate-500">{unit.trim()}</span> : null}
         </span>
       </span>
       <input

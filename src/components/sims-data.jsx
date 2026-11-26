@@ -199,7 +199,6 @@ export function SolidsSim() {
           min={1}
           max={20}
           unit=" cm"
-          display={shape === 'sphere' ? '—' : h}
         />
       </div>
 
@@ -343,7 +342,7 @@ export function ScaleSim() {
 
   return (
     <div className="space-y-3">
-      <Slider label="පරිමාණ සාධකය (k)" value={k} onChange={setK} min={0.5} max={3} step={0.5} display={k.toFixed(1)} />
+      <Slider label="පරිමාණ සාධකය (k)" value={k} onChange={setK} min={0.5} max={3} step={0.5} />
 
       <SimFrame caption="කුඩා රූපය මුල් රූපයයි; විශාල රූපය k අනුව විශාල කර ඇත.">
         <svg viewBox="0 0 280 180" className="w-full" role="img" aria-label="සමරූපී රූප">

@@ -7,6 +7,10 @@ export default defineConfig({
   // සාපේක්ෂ මාර්ග — GitHub Pages වැනි උප නාමාවලියක සිට විවෘත වීමට
   base: './',
   plugins: [react()],
+  build: {
+    // ප්‍රකාශන ගොනුව dev.html; dist/index.html ලෙස පිටපත් වේ
+    rollupOptions: { input: 'dev.html' },
+  },
   server: {
     host: '0.0.0.0',
     port: 3000,

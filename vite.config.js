@@ -4,6 +4,8 @@ import react from '@vitejs/plugin-react'
 const previewHost = process.env.VITE_PREVIEW_HOST
 
 export default defineConfig({
+  // සාපේක්ෂ මාර්ග — GitHub Pages වැනි උප නාමාවලියක සිට විවෘත වීමට
+  base: './',
   plugins: [react()],
   server: {
     host: '0.0.0.0',

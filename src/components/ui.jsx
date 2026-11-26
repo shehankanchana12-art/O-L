@@ -25,7 +25,7 @@ export function Slider({ label, value, onChange, min, max, step = 1, unit = '', 
 export function SimFrame({ children, caption }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-slate-50 p-2">
-      <div className="mx-auto w-full max-w-sm">{children}</div>
+      <div className="mx-auto w-full max-w-sm lg:max-w-xl">{children}</div>
       {caption ? (
         <p className="mt-1 px-2 pb-1 text-center text-[11.5px] leading-relaxed text-slate-500">{caption}</p>
       ) : null}

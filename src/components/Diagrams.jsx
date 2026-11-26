@@ -1,4 +1,4 @@
-const box = 'mx-auto block w-full max-w-sm'
+const box = 'mx-auto block w-full max-w-sm lg:max-w-md'
 
 export function UnitDiagram({ kind }) {
   switch (kind) {

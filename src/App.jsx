@@ -88,7 +88,7 @@ export default function App() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto max-w-3xl px-3 pb-2 pt-2">
+        <div className="mx-auto max-w-3xl px-3 pb-2 pt-2 lg:max-w-[1180px] lg:px-6 lg:pb-3 lg:pt-3">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-leaf-600 text-[15px] font-extrabold text-white">
@@ -107,7 +107,7 @@ export default function App() {
             </div>
           </div>
 
-          <div role="tablist" aria-label="ශ්‍රේණිය තෝරන්න" className="mt-2 grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1">
+          <div role="tablist" aria-label="ශ්‍රේණිය තෝරන්න" className="mt-2 grid grid-cols-3 gap-1 rounded-xl bg-slate-100 p-1 lg:mt-3 lg:max-w-sm">
             {GRADES.map((g) => (
               <button
                 key={g.id}
@@ -126,7 +126,8 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-3xl space-y-3 px-3 pb-16 pt-3">
+      <main className="mx-auto max-w-3xl px-3 pb-16 pt-3 lg:grid lg:max-w-[1180px] lg:grid-cols-[340px_minmax(0,1fr)] lg:items-start lg:gap-5 lg:px-6 lg:pb-10 lg:pt-5">
+        <div className="space-y-3">
         <section className="card p-4">
           <div className="flex flex-wrap items-center gap-2">
             <span className="chip bg-leaf-600 text-white">{grade.label}</span>
@@ -176,7 +177,7 @@ export default function App() {
           </div>
 
           <div className="mt-3 text-[11px] font-bold uppercase tracking-wide text-slate-500">පාඩම තෝරන්න</div>
-          <div className="mt-1.5 grid gap-1.5 sm:grid-cols-2">
+          <div className="mt-1.5 grid gap-1.5 sm:grid-cols-2 lg:grid-cols-1">
             {units.map((u) => {
               const on = u.id === unit.id
               const lab = progress.labs[u.id]
@@ -208,7 +209,9 @@ export default function App() {
             })}
           </div>
         </section>
+        </div>
 
+        <div className="mt-3 space-y-3 lg:mt-0">
         <UnitWorkspace
           key={unit.id}
           unit={unit}
@@ -221,6 +224,7 @@ export default function App() {
         <p className="px-2 pt-2 text-center text-[11px] leading-relaxed text-slate-400">
           සියලු ප්‍රගතිය මෙම උපාංගයේම සුරකිනු ලැබේ. අන්තර්ජාලය නොමැතිව ද භාවිත කළ හැක.
         </p>
+        </div>
       </main>
     </div>
   )

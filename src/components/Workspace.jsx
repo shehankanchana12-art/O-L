@@ -34,7 +34,7 @@ function TabBar({ active, onChange }) {
 }
 
 /* ------------------------------- Theory ------------------------------- */
-function TheoryTab({ unit }) {
+function TheoryTab({ unit, onOpenPractice }) {
   return (
     <div className="space-y-3">
       {unit.diagram ? (
@@ -129,6 +129,36 @@ function TheoryTab({ unit }) {
           </div>
         </section>
       ) : null}
+
+      {unit.practice ? <PracticeCta note={unit.practiceNote} onOpenPractice={onOpenPractice} compact /> : null}
+    </div>
+  )
+}
+
+/* --------------------------- ප්‍රායෝගික සබැඳිය --------------------------- */
+function PracticeCta({ note, onOpenPractice, compact }) {
+  if (!onOpenPractice) return null
+  return (
+    <div
+      className={`rounded-2xl border border-sky-200 bg-gradient-to-r from-sky-50 to-leaf-50 ${
+        compact ? 'p-3' : 'p-4'
+      }`}
+    >
+      <div className="flex items-start gap-2">
+        <span aria-hidden="true" className="text-lg leading-none">
+          🖥️
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="text-[13.5px] font-bold text-sky-900">ප්‍රායෝගික පිටුව — Windows Apps & සජීවී HTML</div>
+          <p className="mt-0.5 text-[12px] leading-relaxed text-slate-600">
+            {note ||
+              'මෙම පාඩමට අදාළ මෘදුකාංග අභ්‍යාස හා සජීවී HTML කේත අධ්‍යයනාගාරය වෙනම පිටුවකින් විවෘත කරන්න.'}
+          </p>
+        </div>
+      </div>
+      <button type="button" onClick={onOpenPractice} className="btn-primary mt-2 w-full py-2 text-[12.5px]">
+        ප්‍රායෝගික පිටුව විවෘත කරන්න →
+      </button>
     </div>
   )
 }
@@ -569,7 +599,7 @@ function QuizTab({ unit, best, onSave }) {
 }
 
 /* ------------------------------ Workspace ----------------------------- */
-export function UnitWorkspace({ unit, labDone, bestScore, onToggleLab, onSaveQuiz }) {
+export function UnitWorkspace({ unit, labDone, bestScore, onToggleLab, onSaveQuiz, onOpenPractice }) {
   const [tab, setTab] = useState('theory')
 
   return (
@@ -595,10 +625,12 @@ export function UnitWorkspace({ unit, labDone, bestScore, onToggleLab, onSaveQui
         </div>
       </div>
 
+      {unit.practice ? <PracticeCta note={unit.practiceNote} onOpenPractice={onOpenPractice} /> : null}
+
       <TabBar active={tab} onChange={setTab} />
 
       <div>
-        {tab === 'theory' ? <TheoryTab unit={unit} /> : null}
+        {tab === 'theory' ? <TheoryTab unit={unit} onOpenPractice={onOpenPractice} /> : null}
         {tab === 'lab' ? <LabTab unit={unit} done={labDone} onComplete={onToggleLab} /> : null}
         {tab === 'examples' ? <ExamplesTab unit={unit} /> : null}
         {tab === 'quiz' ? <QuizTab unit={unit} best={bestScore} onSave={onSaveQuiz} /> : null}

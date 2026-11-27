@@ -8,6 +8,14 @@ import {
   InductionSim,
 } from './sims-mech.jsx'
 import { AnglesSim, StatsSim, SolidsSim, ProbSim, ScaleSim } from './sims-data.jsx'
+import {
+  NumberBaseSim,
+  LogicGateSim,
+  FlowchartSim,
+  QuerySim,
+  SheetFnsSim,
+  TraceSim,
+} from './sims-ict.jsx'
 
 const FLAT = 'text-[11px] fill-slate-400'
 const AXIS = '#94a3b8'
@@ -848,4 +856,10 @@ export const SIMS = {
   solids: SolidsSim,
   prob: ProbSim,
   scale: ScaleSim,
+  numberbase: NumberBaseSim,
+  logic: LogicGateSim,
+  flowchart: FlowchartSim,
+  query: QuerySim,
+  sheetFns: SheetFnsSim,
+  trace: TraceSim,
 }

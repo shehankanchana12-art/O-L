@@ -1,13 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { GRADES } from './data/lessonsData.js'
 import { UnitWorkspace } from './components/Workspace.jsx'
+import { PracticePage } from './components/PracticePage.jsx'
 
 const STORAGE_KEY = 'ol-si-sinhala-progress-v1'
 
 const SUBJECTS = [
   { id: 'math', label: 'ගණිතය', icon: '📐' },
   { id: 'science', label: 'විද්‍යාව', icon: '🔬' },
+  { id: 'ict', label: 'තොරතුරු තාක්ෂණය', icon: '💻' },
 ]
+
+const readRoute = () =>
+  typeof window !== 'undefined' && window.location.hash.startsWith('#/practice') ? 'practice' : 'lessons'
 
 function loadProgress() {
   const base = { grade: 'g9', subject: 'math', unitId: null, labs: {}, quizzes: {} }
@@ -28,6 +33,7 @@ function loadProgress() {
 
 export default function App() {
   const [progress, setProgress] = useState(loadProgress)
+  const [route, setRoute] = useState(readRoute)
 
   useEffect(() => {
     try {
@@ -37,13 +43,19 @@ export default function App() {
     }
   }, [progress])
 
+  useEffect(() => {
+    const onHash = () => setRoute(readRoute())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
   const grade = GRADES.find((g) => g.id === progress.grade) ?? GRADES[0]
-  const subject = progress.subject === 'science' ? 'science' : 'math'
-  const units = grade.subjects[subject].units
+  const subjectId = SUBJECTS.some((s) => s.id === progress.subject) ? progress.subject : 'math'
+  const units = grade.subjects[subjectId].units
   const unit = units.find((u) => u.id === progress.unitId) ?? units[0]
 
   const gradeStats = useMemo(() => {
-    const all = [...grade.subjects.math.units, ...grade.subjects.science.units]
+    const all = Object.values(grade.subjects).flatMap((s) => s.units)
     const simUnits = all.filter((u) => u.hasSimulation)
     const simTotal = simUnits.length
     const labs = simUnits.filter((u) => progress.labs[u.id]).length
@@ -58,9 +70,21 @@ export default function App() {
     return { total: all.length, simTotal, labs, avg }
   }, [grade, progress.labs, progress.quizzes])
 
+  const openPractice = () => {
+    if (typeof window !== 'undefined') window.location.hash = '#/practice'
+    setRoute('practice')
+    window.scrollTo({ top: 0 })
+  }
+
+  const backToLessons = () => {
+    if (typeof window !== 'undefined') window.location.hash = ''
+    setRoute('lessons')
+    window.scrollTo({ top: 0 })
+  }
+
   const selectGrade = (id) => {
     const g = GRADES.find((x) => x.id === id)
-    const nextUnits = g.subjects[subject].units
+    const nextUnits = g.subjects[subjectId].units
     const remembered = progress.unitId && nextUnits.find((u) => u.id === progress.unitId)
     setProgress((p) => ({ ...p, grade: id, unitId: remembered ? progress.unitId : nextUnits[0].id }))
   }
@@ -85,6 +109,8 @@ export default function App() {
       return { ...p, quizzes: { ...p.quizzes, [unitId]: { score, total } } }
     })
 
+  if (route === 'practice') return <PracticePage onBack={backToLessons} />
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -95,7 +121,7 @@ export default function App() {
                 ∑
               </span>
               <div>
-                <h1 className="text-[15px] font-extrabold leading-tight">ගණිතය හා විද්‍යාව</h1>
+                <h1 className="text-[15px] font-extrabold leading-tight">ගණිතය · විද්‍යාව · ICT</h1>
                 <p className="text-[10.5px] leading-tight text-slate-500">O/L සූදානම · 9, 10, 11 ශ්‍රේණි</p>
               </div>
             </div>
@@ -123,6 +149,16 @@ export default function App() {
               </button>
             ))}
           </div>
+
+          <button
+            type="button"
+            onClick={openPractice}
+            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-sky-600 to-leaf-600 px-3 py-2 text-[12.5px] font-bold text-white shadow-sm transition hover:brightness-105 lg:mt-3 lg:w-auto lg:px-4"
+          >
+            <span aria-hidden="true">🖥️</span>
+            ප්‍රායෝගික පිටුව — Windows Apps & සජීවී HTML
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
       </header>
 
@@ -154,16 +190,16 @@ export default function App() {
 
         <section className="card p-3">
           <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500">විෂය තෝරන්න</div>
-          <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+          <div className="mt-1.5 grid grid-cols-3 gap-1.5">
             {SUBJECTS.map((s) => {
-              const on = s.id === subject
+              const on = s.id === subjectId
               return (
                 <button
                   key={s.id}
                   type="button"
                   onClick={() => selectSubject(s.id)}
                   aria-pressed={on}
-                  className={`flex items-center justify-center gap-2 rounded-xl border px-3 py-2.5 text-[13.5px] font-bold transition ${
+                  className={`flex flex-col items-center justify-center gap-0.5 rounded-xl border px-1 py-2 text-center text-[11.5px] font-bold leading-tight transition sm:flex-row sm:gap-2 sm:text-[13px] ${
                     on
                       ? 'border-leaf-500 bg-leaf-50 text-leaf-700'
                       : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -203,6 +239,9 @@ export default function App() {
                         {q.score}/{q.total}
                       </span>
                     ) : null}
+                    {u.practice ? (
+                      <span className="chip bg-violet-50 px-1.5 py-0 text-[10px] text-violet-700">ප්‍රායෝගික</span>
+                    ) : null}
                   </div>
                 </button>
               )
@@ -219,6 +258,7 @@ export default function App() {
           bestScore={progress.quizzes[unit.id]}
           onToggleLab={() => toggleLab(unit.id)}
           onSaveQuiz={(score, total) => saveQuiz(unit.id, score, total)}
+          onOpenPractice={openPractice}
         />
 
         <p className="px-2 pt-2 text-center text-[11px] leading-relaxed text-slate-400">

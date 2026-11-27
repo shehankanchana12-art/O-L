@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { WINDOWS_APPS } from '../data/practice.js'
+import { WIN_APPS, WinDesktop } from './practice/winui.jsx'
 import { SheetLab } from './practice/SheetLab.jsx'
 import { DocLab } from './practice/DocLab.jsx'
+import { PptLab } from './practice/PptLab.jsx'
 import { DbLab } from './practice/DbLab.jsx'
 import { HtmlStudio } from './practice/HtmlStudio.jsx'
 
@@ -10,11 +12,35 @@ const MODES = [
   { id: 'html', label: 'සජීවී HTML ඉගෙනුම් පිටුව', icon: '💻' },
 ]
 
-const LABS = [
-  { id: 'sheet', label: 'පැතුරුම්පත් සජීවී ජාලය', icon: '📊' },
-  { id: 'doc', label: 'ලේඛන සැකසුම් අභ්‍යාසය', icon: '📝' },
-  { id: 'db', label: 'දත්ත සමුදා විමසුම්', icon: '🗄️' },
-]
+const EXERCISES = {
+  word: [
+    'මාතෘකාව Heading 1 ලෙස සකසා මැදට පෙළගසන්න (Ctrl + E).',
+    'Insert → වගුව මගින් වගුවක් ඇතුළත් කර එය පුරවන්න.',
+    'Layout → ආන්තික "පටු" ලෙස වෙනස් කර පිටුව බලන්න.',
+    'ඡේදයක් තෝරා B, I, U හා ඉස්මතු වර්ණය යොදන්න.',
+    'View → විශාලනය 125% කර පසුව නැවත 100% කරන්න.',
+  ],
+  excel: [
+    'B2:B7 අගයන් වෙනස් කර D හා E තීරු ස්වයංක්‍රීයව යාවත්කාලීන වන බව බලන්න.',
+    'F2 සෛලයේ IF සූත්‍රය 45, 60 වැනි අගයන් සමඟ අත්හදා බලන්න.',
+    'නව සෛලයක =MAX(B2:B7) හා =COUNTIF(B2:B7,">=75") ලියන්න.',
+    'Insert → ප්‍රස්තාරය මගින් තීරු ප්‍රස්තාරයක් පෙන්වන්න.',
+    'දත්ත පත්‍රිකාවේ "+" මගින් නව පත්‍රයක් එකතු කරන්න.',
+  ],
+  ppt: [
+    'නව ස්ලයිඩයක් එකතු කර මාතෘකාවක් හා කරුණු 3ක් ලියන්න.',
+    'සැලසුම් ටැබයෙන් තේමාවක් තෝරන්න.',
+    'ස්ලයිඩ සටහන් කොටසේ ඉදිරිපත් කිරීමේ සටහන් ලියන්න.',
+    'F5 මගින් ඉදිරිපත් කිරීම ආරම්භ කර ඊතල යතුරුවලින් යන්න.',
+  ],
+  access: [
+    'Students වගුවේ නව වාර්තාවක් එකතු කර අගයන් පුරවන්න.',
+    'විමසුම් සැලසුමේ Marks කොන්දේසියට >75 ලියා ප්‍රතිඵල බලන්න.',
+    'Grade කොන්දේසිය 10 ලෙස තබා වර්ගය අවරෝහණ කරන්න.',
+    'SQL ටැබයෙන් සෑදෙන විමසුම කියවන්න.',
+    'rptMarks වාර්තාව විවෘත කර සාමාන්‍යය හා උපරිම බලන්න.',
+  ],
+}
 
 function AppGuide({ item }) {
   return (
@@ -98,9 +124,10 @@ function AppGuide({ item }) {
 export function PracticePage({ onBack }) {
   const [mode, setMode] = useState('apps')
   const [grade, setGrade] = useState('all')
-  const [lab, setLab] = useState('sheet')
+  const [app, setApp] = useState('word')
 
   const apps = WINDOWS_APPS.filter((a) => grade === 'all' || String(a.grade) === grade)
+  const meta = WIN_APPS.find((a) => a.id === app) || WIN_APPS[0]
 
   return (
     <div className="min-h-screen">
@@ -148,9 +175,9 @@ export function PracticePage({ onBack }) {
             <section className="card border-l-4 border-sky-500 p-4">
               <h1 className="text-[15.5px] font-extrabold">වින්ඩෝස් මෘදුකාංග පුහුණුව — 9, 10, 11 ශ්‍රේණි</h1>
               <p className="mt-1.5 text-[12.5px] leading-relaxed text-slate-700">
-                ලේඛන සැකසුම්, විද්‍යුත් පැතුරුම්පත්, ඉදිරිපත් කිරීම් හා දත්ත සමුදා මෘදුකාංගවල
-                ප්‍රධාන කාර්යයන් මෙහි පියවරෙන් පියවර පුහුණු වන්න. පහත සජීවී ජාල මගින් සැබෑ
-                මෘදුකාංගයක් නොමැතිව ද සූත්‍ර, සැකසුම් හා විමසුම් අත්හදා බැලිය හැක.
+                පහත වැඩතලයේ Word, Excel, PowerPoint හා Access කවුළු විවෘත වේ. සැබෑ මෘදුකාංගයේ මෙන් Ribbon
+                මෙනු, සූත්‍ර තීරුව, පත්‍රිකා හා විමසුම් සැලසුම භාවිත කර ලේඛන, ගණනය, ඉදිරිපත් කිරීම් හා දත්ත
+                සමුදා අභ්‍යාස කරන්න. කවුළු වසන්න හෝ අවම කරන්නත්, කාර්ය තීරුවෙන් නැවත විවෘත කරන්නත් හැක.
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {['all', '9', '10', '11'].map((g) => (
@@ -170,31 +197,30 @@ export function PracticePage({ onBack }) {
               </div>
             </section>
 
+            <WinDesktop app={app} onApp={setApp}>
+              {app === 'word' ? <DocLab /> : null}
+              {app === 'excel' ? <SheetLab /> : null}
+              {app === 'ppt' ? <PptLab /> : null}
+              {app === 'access' ? <DbLab /> : null}
+            </WinDesktop>
+
             <section className="card p-3">
-              <div className="flex flex-wrap gap-1.5">
-                {LABS.map((l) => (
-                  <button
-                    key={l.id}
-                    type="button"
-                    onClick={() => setLab(l.id)}
-                    className={`flex-1 rounded-xl border px-2 py-1.5 text-[11.5px] font-bold leading-snug transition ${
-                      lab === l.id
-                        ? 'border-leaf-500 bg-leaf-50 text-leaf-700'
-                        : 'border-slate-200 bg-white text-slate-600'
-                    }`}
-                  >
-                    <span aria-hidden="true" className="mr-1">
-                      {l.icon}
+              <div className="flex flex-wrap items-center justify-between gap-1">
+                <h2 className="text-[12.5px] font-extrabold">
+                  පුහුණු කාර්ය — {meta.label} ({meta.sub})
+                </h2>
+                <span className="text-[10px] font-semibold text-slate-400">ඉහත කවුළුව තුළම කරන්න</span>
+              </div>
+              <ol className="mt-1.5 space-y-1">
+                {EXERCISES[app].map((t, i) => (
+                  <li key={t} className="flex gap-1.5 text-[12px] leading-relaxed text-slate-700">
+                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-leaf-600 text-[9px] font-bold text-white">
+                      {i + 1}
                     </span>
-                    {l.label}
-                  </button>
+                    <span>{t}</span>
+                  </li>
                 ))}
-              </div>
-              <div className="mt-3">
-                {lab === 'sheet' ? <SheetLab /> : null}
-                {lab === 'doc' ? <DocLab /> : null}
-                {lab === 'db' ? <DbLab /> : null}
-              </div>
+              </ol>
             </section>
 
             <div className="px-1 pt-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">
@@ -207,8 +233,9 @@ export function PracticePage({ onBack }) {
             </div>
 
             <p className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-[11.5px] leading-relaxed text-slate-500">
-              සටහන: මෙම ජාල බ්‍රවුසරය තුළ ක්‍රියා කරන අභ්‍යාස පිටපත් වේ. සැබෑ Word, Excel හෝ Access
-              මෘදුකාංගයේ මෙනු නාම හා කෙටි මාර්ග එලෙසම භාවිත කර ඇති බැවින් පන්තියේදී ඒවා අනුගමනය කළ හැක.
+              සටහන: මෙම කවුළු බ්‍රවුසරය තුළ ක්‍රියා කරන අභ්‍යාස පිටපත් වේ. සැබෑ Word, Excel, PowerPoint හෝ Access
+              මෘදුකාංගයේ මෙනු නාම හා කෙටි මාර්ග එලෙසම භාවිත කර ඇති බැවින් පන්තියේදී ඒවා අනුගමනය කළ හැක. ඔබේ
+              වෙනස්කම් මෙම උපාංගයේම සුරැකේ.
             </p>
           </div>
         ) : (

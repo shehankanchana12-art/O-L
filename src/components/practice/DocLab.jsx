@@ -30,10 +30,10 @@ const DEFAULT_DOC = {
 }
 
 const TABS = [
-  { id: 'home', label: 'මුල් පිටුව' },
-  { id: 'insert', label: 'ඇතුළු කරන්න' },
-  { id: 'layout', label: 'සැලසුම' },
-  { id: 'view', label: 'දර්ශනය' },
+  { id: 'home', label: 'Home' },
+  { id: 'insert', label: 'Insert' },
+  { id: 'layout', label: 'Layout' },
+  { id: 'view', label: 'View' },
 ]
 
 const MARGINS = { normal: '7% 9%', narrow: '4% 5%', wide: '11% 14%' }
@@ -90,7 +90,7 @@ export function DocLab() {
   const saveTimer = useRef(null)
 
   const [tab, setTab] = useState('home')
-  const [saveState, setSaveState] = useState('සුරකින ලදී')
+  const [saveState, setSaveState] = useState('Saved')
   const [fmt, setFmt] = useState({})
   const [fontSize, setFontSize] = useState(14)
   const [font, setFont] = useState('Noto Sans Sinhala')
@@ -152,11 +152,11 @@ export function DocLab() {
     docRef.current = { ...docRef.current, html: el.innerHTML }
     const text = el.innerText || ''
     setStats({ words: words(text), chars: text.replace(/\s/g, '').length })
-    setSaveState('සුරකිමින්…')
+    setSaveState('Saving…')
     window.clearTimeout(saveTimer.current)
     saveTimer.current = window.setTimeout(() => {
       persist()
-      setSaveState('සුරකින ලදී')
+      setSaveState('Saved')
     }, 700)
   }
 
@@ -171,7 +171,7 @@ export function DocLab() {
     const el = editorRef.current
     if (el) docRef.current = { ...docRef.current, html: el.innerHTML }
     persist()
-    setSaveState('සුරකින ලදී')
+    setSaveState('Saved')
   }
 
   const exec = (cmd, val = null) => {
@@ -244,7 +244,7 @@ export function DocLab() {
   const insertImage = () =>
     exec(
       'insertHTML',
-      '<div style="border:1px dashed #94a3b8;background:#f8fafc;padding:18px;text-align:center;color:#64748b;font-size:11px;margin:6px 0">රූපය — Insert → Pictures මගින් රූපයක් තෝරන්න</div><p><br></p>',
+      '<div style="border:1px dashed #94a3b8;background:#f8fafc;padding:18px;text-align:center;color:#64748b;font-size:11px;margin:6px 0">Picture — use Insert → Pictures to choose an image</div><p><br></p>',
     )
 
   const insertLink = () =>
@@ -260,18 +260,18 @@ export function DocLab() {
   return (
     <WinWindow>
       <TitleBar badge="W" color="#2b579a" file="මගේ පාසල.docx" app="Word" saving={saveState} />
-      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="Ctrl + B / I / U = අකුරු සැකසුම" />
+      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="Ctrl + B / I / U = font styles" />
       <RibbonBar>
         {tab === 'home' ? (
           <>
-            <RibbonGroup label="සුරකින්න">
-              <RBtn icon="💾" label="සුරකින්න" onClick={saveNow} title="Ctrl + S" />
-              <RBtn icon="↶" label="අහෝසි" onClick={() => exec('undo')} title="Ctrl + Z" />
-              <RBtn icon="↷" label="නැවත" onClick={() => exec('redo')} title="Ctrl + Y" />
+            <RibbonGroup label="File">
+              <RBtn icon="💾" label="Save" onClick={saveNow} title="Ctrl + S" />
+              <RBtn icon="↶" label="Undo" onClick={() => exec('undo')} title="Ctrl + Z" />
+              <RBtn icon="↷" label="Redo" onClick={() => exec('redo')} title="Ctrl + Y" />
             </RibbonGroup>
-            <RibbonGroup label="ෆොන්ට්">
-              <RSelect value={font} onChange={applyFont} options={FONTS} label="ෆොන්ට්" className="w-[76px]" />
-              <RSelect value={String(fontSize)} onChange={applySize} options={SIZES} label="ප්‍රමාණය" className="w-[48px]" />
+            <RibbonGroup label="Font">
+              <RSelect value={font} onChange={applyFont} options={FONTS} label="Font" className="w-[76px]" />
+              <RSelect value={String(fontSize)} onChange={applySize} options={SIZES} label="Size" className="w-[48px]" />
               <div className="grid grid-cols-4 gap-0.5">
                 <RBtn icon="B" label="" active={fmt.bold} onClick={() => exec('bold')} className="font-bold" />
                 <RBtn icon="I" active={fmt.italic} onClick={() => exec('italic')} className="font-serif italic" />
@@ -279,38 +279,38 @@ export function DocLab() {
                 <RBtn icon="S" active={fmt.strike} onClick={() => exec('strikeThrough')} className="line-through" />
               </div>
               <div className="flex items-center gap-0.5">
-                <label className="flex shrink-0 flex-col items-center gap-0.5" title="අකුරු වර්ණය">
+                <label className="flex shrink-0 flex-col items-center gap-0.5" title="Font Color">
                   <input
                     type="color"
                     value={color}
                     onChange={(e) => applyColor(e.target.value)}
                     className="h-[17px] w-[21px] cursor-pointer rounded border border-slate-300 bg-white p-0"
-                    aria-label="අකුරු වර්ණය"
+                    aria-label="Font Color"
                   />
-                  <span className="text-[7px] leading-none text-slate-400">වර්ණය</span>
+                  <span className="text-[7px] leading-none text-slate-400">Color</span>
                 </label>
-                <label className="flex shrink-0 flex-col items-center gap-0.5" title="ඉස්මතු වර්ණය">
+                <label className="flex shrink-0 flex-col items-center gap-0.5" title="Text Highlight Color">
                   <input
                     type="color"
                     value={highlight}
                     onChange={(e) => applyHighlight(e.target.value)}
                     className="h-[17px] w-[21px] cursor-pointer rounded border border-slate-300 bg-white p-0"
-                    aria-label="ඉස්මතු වර්ණය"
+                    aria-label="Text Highlight Color"
                   />
-                  <span className="text-[7px] leading-none text-slate-400">ඉස්මතු</span>
+                  <span className="text-[7px] leading-none text-slate-400">Highlight</span>
                 </label>
-                <RBtn icon="A✕" label="ඉවත්" onClick={() => exec('removeFormat')} title="සැකසුම් ඉවත් කරන්න" />
+                <RBtn icon="A✕" label="Clear" onClick={() => exec('removeFormat')} title="Clear all formatting" />
               </div>
             </RibbonGroup>
-            <RibbonGroup label="ඡේදය">
-              <RBtn icon="•" active={fmt.ul} onClick={() => exec('insertUnorderedList')} title="බුලට් ලැයිස්තුව" />
-              <RBtn icon="1." active={fmt.ol} onClick={() => exec('insertOrderedList')} title="අංකිත ලැයිස්තුව" />
-              <RBtn icon="⇤" onClick={() => exec('justifyLeft')} active={fmt.left} title="වමට" />
-              <RBtn icon="⇔" onClick={() => exec('justifyCenter')} active={fmt.center} title="මැදට" />
-              <RBtn icon="⇥" onClick={() => exec('justifyRight')} active={fmt.right} title="දකුණට" />
-              <RBtn icon="☰" onClick={() => exec('justifyFull')} active={fmt.full} title="දෙපසට" />
+            <RibbonGroup label="Paragraph">
+              <RBtn icon="•" active={fmt.ul} onClick={() => exec('insertUnorderedList')} title="Bullets" />
+              <RBtn icon="1." active={fmt.ol} onClick={() => exec('insertOrderedList')} title="Numbering" />
+              <RBtn icon="⇤" onClick={() => exec('justifyLeft')} active={fmt.left} title="Align Left" />
+              <RBtn icon="⇔" onClick={() => exec('justifyCenter')} active={fmt.center} title="Center" />
+              <RBtn icon="⇥" onClick={() => exec('justifyRight')} active={fmt.right} title="Align Right" />
+              <RBtn icon="☰" onClick={() => exec('justifyFull')} active={fmt.full} title="Justify" />
             </RibbonGroup>
-            <RibbonGroup label="පරතරය">
+            <RibbonGroup label="Spacing">
               <RSelect
                 value={String(doc.lineHeight)}
                 onChange={(v) => patch({ lineHeight: Number(v) })}
@@ -320,93 +320,93 @@ export function DocLab() {
                   { value: '1.8', label: '1.8' },
                   { value: '2', label: '2.0' },
                 ]}
-                label="පේළි"
+                label="Line Spacing"
               />
-              <RBtn icon="→|" label="ඉන්ඩෙන්ට්" onClick={() => exec('indent')} />
+              <RBtn icon="→|" label="Indent" onClick={() => exec('indent')} />
             </RibbonGroup>
-            <RibbonGroup label="ශෛලීන්">
-              <RBtn icon="H1" label="මාතෘකාව 1" onClick={() => exec('formatBlock', 'h1')} />
-              <RBtn icon="H2" label="මාතෘකාව 2" onClick={() => exec('formatBlock', 'h2')} />
-              <RBtn icon="¶" label="සාමාන්‍ය" onClick={() => exec('formatBlock', 'p')} />
+            <RibbonGroup label="Styles">
+              <RBtn icon="H1" label="Heading 1" onClick={() => exec('formatBlock', 'h1')} />
+              <RBtn icon="H2" label="Heading 2" onClick={() => exec('formatBlock', 'h2')} />
+              <RBtn icon="¶" label="Normal" onClick={() => exec('formatBlock', 'p')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'insert' ? (
           <>
-            <RibbonGroup label="වගුව">
-              <RBtn icon="▦" label="වගුව" onClick={insertTable} />
+            <RibbonGroup label="Tables">
+              <RBtn icon="▦" label="Table" onClick={insertTable} />
             </RibbonGroup>
-            <RibbonGroup label="රූප හා සබැඳි">
-              <RBtn icon="🖼" label="රූපය" onClick={insertImage} />
-              <RBtn icon="🔗" label="සබැඳිය" onClick={insertLink} />
+            <RibbonGroup label="Illustrations &amp; Links">
+              <RBtn icon="🖼" label="Picture" onClick={insertImage} />
+              <RBtn icon="🔗" label="Link" onClick={insertLink} />
             </RibbonGroup>
-            <RibbonGroup label="පිටුව">
+            <RibbonGroup label="Pages">
               <RBtn
                 icon="⤓"
-                label="පිටු බිඳුම"
+                label="Page Break"
                 onClick={() =>
                   exec('insertHTML', '<hr style="border:0;border-top:2px dashed #94a3b8;margin:14px 0" /><p><br></p>')
                 }
               />
               <RBtn
                 icon="#"
-                label="පිටු අංකය"
+                label="Page Number"
                 active={doc.footer}
                 onClick={() => patch({ footer: !doc.footer })}
               />
-              <RBtn icon="H" label="ශීර්ෂය" active={doc.header} onClick={() => patch({ header: !doc.header })} />
+              <RBtn icon="H" label="Header" active={doc.header} onClick={() => patch({ header: !doc.header })} />
             </RibbonGroup>
-            <RibbonGroup label="පෙළ">
-              <RBtn icon="📅" label="දිනය" onClick={insertDate} />
-              <RBtn icon="©" label="සංකේතය" onClick={() => exec('insertText', '©')} />
-              <RBtn icon="—" label="රේඛාව" onClick={() => exec('insertHorizontalRule')} />
+            <RibbonGroup label="Text">
+              <RBtn icon="📅" label="Date" onClick={insertDate} />
+              <RBtn icon="©" label="Symbol" onClick={() => exec('insertText', '©')} />
+              <RBtn icon="—" label="Horizontal Line" onClick={() => exec('insertHorizontalRule')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'layout' ? (
           <>
-            <RibbonGroup label="පිටු සැකසුම">
+            <RibbonGroup label="Page Setup">
               <RSelect
                 value={doc.margins}
                 onChange={(v) => patch({ margins: v })}
                 options={[
-                  { value: 'normal', label: 'සාමාන්‍ය' },
-                  { value: 'narrow', label: 'පටු' },
-                  { value: 'wide', label: 'පළල්' },
+                  { value: 'normal', label: 'Normal' },
+                  { value: 'narrow', label: 'Narrow' },
+                  { value: 'wide', label: 'Wide' },
                 ]}
-                label="ආන්තික"
+                label="Margins"
               />
               <RBtn
                 icon="▯"
-                label="සිරස්"
+                label="Portrait"
                 active={doc.orientation === 'portrait'}
                 onClick={() => patch({ orientation: 'portrait' })}
               />
               <RBtn
                 icon="▭"
-                label="තිරස්"
+                label="Landscape"
                 active={doc.orientation === 'landscape'}
                 onClick={() => patch({ orientation: 'landscape' })}
               />
             </RibbonGroup>
-            <RibbonGroup label="තීරු">
+            <RibbonGroup label="Columns">
               <RSelect
                 value={String(doc.columns)}
                 onChange={(v) => patch({ columns: Number(v) })}
                 options={[
-                  { value: '1', label: '1 තීරුව' },
-                  { value: '2', label: '2 තීරු' },
-                  { value: '3', label: '3 තීරු' },
+                  { value: '1', label: 'One' },
+                  { value: '2', label: 'Two' },
+                  { value: '3', label: 'Three' },
                 ]}
-                label="තීරු ගණන"
+                label="Columns"
               />
             </RibbonGroup>
-            <RibbonGroup label="පිටු පසුබිම">
+            <RibbonGroup label="Page Background">
               <RBtn
                 icon="▨"
-                label="ජාල රේඛා"
+                label="Gridlines"
                 active={doc.gridlines}
                 onClick={() => patch({ gridlines: !doc.gridlines })}
               />
@@ -416,12 +416,12 @@ export function DocLab() {
 
         {tab === 'view' ? (
           <>
-            <RibbonGroup label="පෙන්වීම">
-              <RBtn icon="📏" label="මාපකය" active={doc.ruler} onClick={() => patch({ ruler: !doc.ruler })} />
-              <RBtn icon="▦" label="ජාල රේඛා" active={doc.gridlines} onClick={() => patch({ gridlines: !doc.gridlines })} />
-              <RBtn icon="H" label="ශීර්ෂය" active={doc.header} onClick={() => patch({ header: !doc.header })} />
+            <RibbonGroup label="Show">
+              <RBtn icon="📏" label="Ruler" active={doc.ruler} onClick={() => patch({ ruler: !doc.ruler })} />
+              <RBtn icon="▦" label="Gridlines" active={doc.gridlines} onClick={() => patch({ gridlines: !doc.gridlines })} />
+              <RBtn icon="H" label="Header" active={doc.header} onClick={() => patch({ header: !doc.header })} />
             </RibbonGroup>
-            <RibbonGroup label="විශාලනය">
+            <RibbonGroup label="Zoom">
               <RSelect
                 value={String(doc.zoom)}
                 onChange={(v) => patch({ zoom: Number(v) })}
@@ -432,12 +432,12 @@ export function DocLab() {
                   { value: '125', label: '125%' },
                   { value: '150', label: '150%' },
                 ]}
-                label="විශාලනය"
+                label="Zoom"
               />
-              <RBtn icon="⤢" label="ගැලපෙන" onClick={() => patch({ zoom: 100 })} />
+              <RBtn icon="⤢" label="Fit Page" onClick={() => patch({ zoom: 100 })} />
             </RibbonGroup>
-            <RibbonGroup label="සුරකින්න">
-              <RBtn icon="💾" label="සුරකින්න" onClick={saveNow} />
+            <RibbonGroup label="File">
+              <RBtn icon="💾" label="Save" onClick={saveNow} />
             </RibbonGroup>
           </>
         ) : null}
@@ -480,16 +480,16 @@ export function DocLab() {
       </div>
 
       <StatusBar
-        left="පිටුව 1 / 1"
-        center={`වචන: ${stats.words} · අකුරු: ${stats.chars}`}
+        left="Page 1 of 1"
+        center={`Words: ${stats.words} · Characters: ${stats.chars}`}
         right={
           <span className="flex items-center gap-1">
-            <span className="hidden sm:inline">සිංහල (ශ්‍රී ලංකා)</span>
-            <button type="button" onClick={() => patch({ zoom: Math.max(50, doc.zoom - 10) })} aria-label="කුඩා කරන්න">
+            <span className="hidden sm:inline">Sinhala (Sri Lanka)</span>
+            <button type="button" onClick={() => patch({ zoom: Math.max(50, doc.zoom - 10) })} aria-label="Zoom out">
               −
             </button>
             <span className="w-7 text-center">{doc.zoom}%</span>
-            <button type="button" onClick={() => patch({ zoom: Math.min(150, doc.zoom + 10) })} aria-label="විශාල කරන්න">
+            <button type="button" onClick={() => patch({ zoom: Math.min(150, doc.zoom + 10) })} aria-label="Zoom in">
               +
             </button>
           </span>

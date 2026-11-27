@@ -14,16 +14,16 @@ import {
 const KEY = 'ol-practice-ppt-v1'
 
 const THEMES = [
-  { id: 'leaf', name: 'හරිත', accent: '#0f9d63', title: '#0a6340', bg: '#ffffff' },
-  { id: 'ocean', name: 'නිල්', accent: '#2563eb', title: '#1e3a8a', bg: '#f8fbff' },
-  { id: 'sunset', name: 'සන්සෙට්', accent: '#ea580c', title: '#9a3412', bg: '#fffaf5' },
-  { id: 'slate', name: 'අළු', accent: '#475569', title: '#1e293b', bg: '#f8fafc' },
+  { id: 'leaf', name: 'Green', accent: '#0f9d63', title: '#0a6340', bg: '#ffffff' },
+  { id: 'ocean', name: 'Blue', accent: '#2563eb', title: '#1e3a8a', bg: '#f8fbff' },
+  { id: 'sunset', name: 'Sunset', accent: '#ea580c', title: '#9a3412', bg: '#fffaf5' },
+  { id: 'slate', name: 'Slate', accent: '#475569', title: '#1e293b', bg: '#f8fafc' },
 ]
 
 const LAYOUTS = [
-  { value: 'title', label: 'මාතෘකා ස්ලයිඩය' },
-  { value: 'content', label: 'මාතෘකාව + අන්තර්ගතය' },
-  { value: 'section', label: 'අංශ ස්ලයිඩය' },
+  { value: 'title', label: 'Title Slide' },
+  { value: 'content', label: 'Title and Content' },
+  { value: 'section', label: 'Section Header' },
 ]
 
 const DEFAULT = {
@@ -58,10 +58,10 @@ const DEFAULT = {
 }
 
 const TABS = [
-  { id: 'home', label: 'මුල් පිටුව' },
-  { id: 'insert', label: 'ඇතුළු කරන්න' },
-  { id: 'design', label: 'සැලසුම' },
-  { id: 'show', label: 'ඉදිරිපත් කිරීම' },
+  { id: 'home', label: 'Home' },
+  { id: 'insert', label: 'Insert' },
+  { id: 'design', label: 'Design' },
+  { id: 'show', label: 'Slide Show' },
 ]
 
 function Thumb({ slide, theme }) {
@@ -73,7 +73,7 @@ function Thumb({ slide, theme }) {
       <div className="absolute inset-x-0 top-0 h-[2px]" style={{ backgroundColor: theme.accent }} />
       <div className={`flex h-full flex-col px-1.5 ${slide.layout === 'title' ? 'justify-center text-center' : 'justify-start pt-2'}`}>
         <div className="truncate text-[6.5px] font-bold leading-tight" style={{ color: theme.title }}>
-          {slide.title || 'මාතෘකාව'}
+          {slide.title || 'Click to add title'}
         </div>
         {slide.layout === 'title' ? (
           <div className="truncate text-[4.5px] leading-tight text-slate-400">{slide.subtitle}</div>
@@ -181,9 +181,9 @@ export function PptLab() {
       list.push({
         id: Date.now(),
         layout: 'content',
-        title: 'නව ස්ලයිඩය',
+        title: 'New Slide',
         subtitle: '',
-        bullets: ['පළමු කරුණ'],
+        bullets: ['First bullet point'],
         notes: '',
       })
       return { ...d, slides: list, active: list.length - 1 }
@@ -245,25 +245,25 @@ export function PptLab() {
 
   return (
     <WinWindow>
-      <TitleBar badge="P" color="#c43e1c" file="මගේ පාසල.pptx" app="PowerPoint" saving="සුරකින ලදී" />
-      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="F5 = මුල සිට ධාවනය" />
+      <TitleBar badge="P" color="#c43e1c" file="මගේ පාසල.pptx" app="PowerPoint" saving="Saved" />
+      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="F5 = start slide show" />
       <RibbonBar>
         {tab === 'home' ? (
           <>
-            <RibbonGroup label="ස්ලයිඩ">
-              <RBtn icon="＋" label="නව ස්ලයිඩය" onClick={addSlide} title="Ctrl + M" />
-              <RBtn icon="⧉" label="පිටපත" onClick={duplicateSlide} />
-              <RBtn icon="🗑" label="මකන්න" onClick={removeSlide} />
+            <RibbonGroup label="Slides">
+              <RBtn icon="＋" label="New Slide" onClick={addSlide} title="Ctrl + M" />
+              <RBtn icon="⧉" label="Duplicate" onClick={duplicateSlide} />
+              <RBtn icon="🗑" label="Delete" onClick={removeSlide} />
             </RibbonGroup>
-            <RibbonGroup label="සැලසුම">
+            <RibbonGroup label="Layout">
               <RSelect
                 value={slide.layout}
                 onChange={(v) => patchSlide({ layout: v })}
                 options={LAYOUTS}
-                label="පිටු සැලසුම"
+                label="Layout"
               />
             </RibbonGroup>
-            <RibbonGroup label="තේමා">
+            <RibbonGroup label="Themes">
               {THEMES.map((t) => (
                 <button
                   key={t.id}
@@ -280,36 +280,36 @@ export function PptLab() {
                 </button>
               ))}
             </RibbonGroup>
-            <RibbonGroup label="පෙළ">
-              <RBtn icon="•" label="කරුණක්" onClick={() => addBullet(bullets.length - 1)} />
-              <RBtn icon="🗒" label="සටහන්" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
+            <RibbonGroup label="Text">
+              <RBtn icon="•" label="Bullet" onClick={() => addBullet(bullets.length - 1)} />
+              <RBtn icon="🗒" label="Notes" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'insert' ? (
           <>
-            <RibbonGroup label="පෙළ">
-              <RBtn icon="T" label="පෙළ පෙට්ටිය" onClick={() => addBullet(bullets.length - 1)} />
-              <RBtn icon="•" label="කරුණක්" onClick={() => addBullet(bullets.length - 1)} />
+            <RibbonGroup label="Text">
+              <RBtn icon="T" label="Text Box" onClick={() => addBullet(bullets.length - 1)} />
+              <RBtn icon="•" label="Bullet" onClick={() => addBullet(bullets.length - 1)} />
             </RibbonGroup>
-            <RibbonGroup label="වස්තු">
+            <RibbonGroup label="Objects">
               <RBtn
                 icon="🖼"
-                label="රූපය"
-                onClick={() => patchSlide({ bullets: [...bullets, 'රූපය සඳහා ස්ථානය (Insert → Pictures)'] })}
+                label="Pictures"
+                onClick={() => patchSlide({ bullets: [...bullets, 'Picture placeholder (Insert → Pictures)'] })}
               />
-              <RBtn icon="▦" label="වගුව" onClick={() => patchSlide({ bullets: [...bullets, 'වගුවක් ඇතුළත් කරන්න'] })} />
+              <RBtn icon="▦" label="Table" onClick={() => patchSlide({ bullets: [...bullets, 'Insert a table'] })} />
             </RibbonGroup>
-            <RibbonGroup label="සටහන්">
-              <RBtn icon="🗒" label="සටහන්" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
+            <RibbonGroup label="Notes">
+              <RBtn icon="🗒" label="Notes" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'design' ? (
           <>
-            <RibbonGroup label="තේමා">
+            <RibbonGroup label="Themes">
               {THEMES.map((t) => (
                 <button
                   key={t.id}
@@ -324,12 +324,12 @@ export function PptLab() {
                 </button>
               ))}
             </RibbonGroup>
-            <RibbonGroup label="සැලසුම">
+            <RibbonGroup label="Layout">
               <RSelect
                 value={slide.layout}
                 onChange={(v) => patchSlide({ layout: v })}
                 options={LAYOUTS}
-                label="පිටු සැලසුම"
+                label="Layout"
               />
             </RibbonGroup>
           </>
@@ -337,10 +337,10 @@ export function PptLab() {
 
         {tab === 'show' ? (
           <>
-            <RibbonGroup label="ඉදිරිපත් කිරීම">
-              <RBtn icon="▶" label="මුල සිට" onClick={() => startShow(false)} title="F5" />
-              <RBtn icon="▶|" label="වත්මන් සිට" onClick={() => startShow(true)} title="Shift + F5" />
-              <RBtn icon="🗒" label="සටහන්" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
+            <RibbonGroup label="Start Slide Show">
+              <RBtn icon="▶" label="From Beginning" onClick={() => startShow(false)} title="F5" />
+              <RBtn icon="▶|" label="From Current Slide" onClick={() => startShow(true)} title="Shift + F5" />
+              <RBtn icon="🗒" label="Notes" active={showNotes} onClick={() => setShowNotes((v) => !v)} />
             </RibbonGroup>
           </>
         ) : null}
@@ -368,7 +368,7 @@ export function PptLab() {
             onClick={addSlide}
             className="w-full rounded border border-dashed border-slate-300 py-1 text-[10px] leading-none text-slate-400 hover:bg-white"
           >
-            ＋ ස්ලයිඩය
+            ＋ Slide
           </button>
         </div>
 
@@ -385,14 +385,14 @@ export function PptLab() {
                   <input
                     value={slide.title}
                     onChange={(e) => patchSlide({ title: e.target.value })}
-                    aria-label="ස්ලයිඩ මාතෘකාව"
+                    aria-label="Slide title"
                     className="w-full bg-transparent text-center text-[clamp(14px,2.6vw,22px)] font-extrabold leading-tight outline-none"
                     style={{ color: theme.title }}
                   />
                   <input
                     value={slide.subtitle || ''}
                     onChange={(e) => patchSlide({ subtitle: e.target.value })}
-                    aria-label="උප මාතෘකාව"
+                    aria-label="Subtitle"
                     className="w-full bg-transparent text-center text-[clamp(8px,1.3vw,11px)] outline-none"
                     style={{ color: theme.accent }}
                   />
@@ -402,7 +402,7 @@ export function PptLab() {
                   <input
                     value={slide.title}
                     onChange={(e) => patchSlide({ title: e.target.value })}
-                    aria-label="අංශ මාතෘකාව"
+                    aria-label="Section title"
                     className="w-full bg-transparent text-center text-[clamp(13px,2.2vw,19px)] font-bold outline-none"
                     style={{ color: theme.title }}
                   />
@@ -410,7 +410,7 @@ export function PptLab() {
                   <input
                     value={slide.subtitle || ''}
                     onChange={(e) => patchSlide({ subtitle: e.target.value })}
-                    aria-label="අංශ උප මාතෘකාව"
+                    aria-label="Section subtitle"
                     className="w-full bg-transparent text-center text-[10px] outline-none"
                     style={{ color: theme.accent }}
                   />
@@ -420,7 +420,7 @@ export function PptLab() {
                   <input
                     value={slide.title}
                     onChange={(e) => patchSlide({ title: e.target.value })}
-                    aria-label="ස්ලයිඩ මාතෘකාව"
+                    aria-label="Slide title"
                     className="w-full bg-transparent text-[clamp(12px,2vw,18px)] font-extrabold leading-tight outline-none"
                     style={{ color: theme.title }}
                   />
@@ -447,13 +447,13 @@ export function PptLab() {
                               removeBullet(i)
                             }
                           }}
-                          aria-label={`කරුණ ${i + 1}`}
+                          aria-label={`Bullet ${i + 1}`}
                           className="min-w-0 flex-1 bg-transparent text-[clamp(8px,1.25vw,11px)] leading-snug text-slate-700 outline-none"
                         />
                         <button
                           type="button"
                           onClick={() => removeBullet(i)}
-                          aria-label={`කරුණ ${i + 1} ඉවත් කරන්න`}
+                          aria-label={`Remove bullet ${i + 1}`}
                           className="shrink-0 text-[8px] leading-none text-slate-300 hover:text-red-500"
                         >
                           ✕
@@ -465,7 +465,7 @@ export function PptLab() {
                       onClick={() => addBullet(bullets.length - 1)}
                       className="text-[8.5px] leading-none text-slate-400 hover:text-slate-600"
                     >
-                      + කරුණක්
+                      + Bullet
                     </button>
                   </div>
                 </div>
@@ -474,7 +474,7 @@ export function PptLab() {
 
             <div className="mt-2 flex items-center justify-between text-[9px] leading-none text-slate-500">
               <span>
-                ස්ලයිඩය {active + 1} / {slides.length}
+                Slide {active + 1} of {slides.length}
               </span>
               <span>{LAYOUTS.find((l) => l.value === slide.layout)?.label}</span>
             </div>
@@ -482,13 +482,13 @@ export function PptLab() {
             {showNotes ? (
               <div className="mt-1 rounded border border-slate-300 bg-white p-1.5">
                 <div className="mb-0.5 text-[8.5px] font-bold uppercase tracking-wide text-slate-400">
-                  ඉදිරිපත් කරන්නාගේ සටහන්
+                  Speaker Notes
                 </div>
                 <textarea
                   rows={2}
                   value={slide.notes || ''}
                   onChange={(e) => patchSlide({ notes: e.target.value })}
-                  aria-label="සටහන්"
+                  aria-label="Notes"
                   className="w-full resize-none rounded border border-slate-200 px-1.5 py-1 text-[10px] leading-snug outline-none focus:border-[#c43e1c]"
                 />
               </div>
@@ -498,9 +498,9 @@ export function PptLab() {
       </div>
 
       <StatusBar
-        left={`ස්ලයිඩය ${active + 1} / ${slides.length}`}
-        center={`තේමාව: ${theme.name}`}
-        right="F5 = ඉදිරිපත් කරන්න"
+        left={`Slide ${active + 1} of ${slides.length}`}
+        center={`Theme: ${theme.name}`}
+        right="F5 = start slide show"
       />
 
       {presenting ? (
@@ -515,21 +515,21 @@ export function PptLab() {
                 onClick={() => setPresentIdx((i) => Math.max(0, i - 1))}
                 className="rounded px-2 py-0.5 hover:bg-white/20"
               >
-                ‹ පෙර
+                ‹ Previous
               </button>
               <button
                 type="button"
                 onClick={() => setPresentIdx((i) => Math.min(slides.length - 1, i + 1))}
                 className="rounded px-2 py-0.5 hover:bg-white/20"
               >
-                ඊළඟ ›
+                Next ›
               </button>
               <button
                 type="button"
                 onClick={() => setPresenting(false)}
                 className="rounded bg-white/20 px-2 py-0.5 hover:bg-white/30"
               >
-                Esc — අවසන්
+                Esc — End Show
               </button>
             </div>
           </div>

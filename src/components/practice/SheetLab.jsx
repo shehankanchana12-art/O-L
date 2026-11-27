@@ -204,7 +204,7 @@ export function displayValue(key, cells, fmtMap) {
     if (f === 'int') return Math.round(v).toLocaleString('en-US')
     if (f === 'dec2') return v.toFixed(2)
     if (f === 'pct') return `${Number(v.toFixed(1))}%`
-    if (f === 'cur') return `රු. ${v.toFixed(2)}`
+    if (f === 'cur') return `Rs. ${v.toFixed(2)}`
     return Number.isInteger(v) ? String(v) : String(Number(v.toFixed(4)))
   }
   return String(v)
@@ -213,83 +213,83 @@ export function displayValue(key, cells, fmtMap) {
 /* ----------------------------- ආරම්භක දත්ත ----------------------------- */
 
 const SEED = {
-  A1: 'නම',
-  B1: 'ගණිතය',
-  C1: 'විද්‍යාව',
-  D1: 'එකතුව',
-  E1: 'සාමාන්‍යය',
-  F1: 'සමත්?',
+  A1: 'Name',
+  B1: 'Maths',
+  C1: 'Science',
+  D1: 'Total',
+  E1: 'Average',
+  F1: 'Pass?',
   A2: 'අමල්',
   B2: '78',
   C2: '85',
   D2: '=SUM(B2:C2)',
   E2: '=AVERAGE(B2:C2)',
-  F2: '=IF(E2>=50,"සමත්","අසමත්")',
+  F2: '=IF(E2>=50,"Pass","Fail")',
   A3: 'නිමල්',
   B3: '62',
   C3: '71',
   D3: '=SUM(B3:C3)',
   E3: '=AVERAGE(B3:C3)',
-  F3: '=IF(E3>=50,"සමත්","අසමත්")',
+  F3: '=IF(E3>=50,"Pass","Fail")',
   A4: 'කමල්',
   B4: '91',
   C4: '88',
   D4: '=SUM(B4:C4)',
   E4: '=AVERAGE(B4:C4)',
-  F4: '=IF(E4>=50,"සමත්","අසමත්")',
+  F4: '=IF(E4>=50,"Pass","Fail")',
   A5: 'සචිනි',
   B5: '55',
   C5: '49',
   D5: '=SUM(B5:C5)',
   E5: '=AVERAGE(B5:C5)',
-  F5: '=IF(E5>=50,"සමත්","අසමත්")',
+  F5: '=IF(E5>=50,"Pass","Fail")',
   A6: 'දිල්ෂා',
   B6: '84',
   C6: '79',
   D6: '=SUM(B6:C6)',
   E6: '=AVERAGE(B6:C6)',
-  F6: '=IF(E6>=50,"සමත්","අසමත්")',
+  F6: '=IF(E6>=50,"Pass","Fail")',
   A7: 'තරිඳු',
   B7: '47',
   C7: '52',
   D7: '=SUM(B7:C7)',
   E7: '=AVERAGE(B7:C7)',
-  F7: '=IF(E7>=50,"සමත්","අසමත්")',
-  A9: 'එකතුව',
+  F7: '=IF(E7>=50,"Pass","Fail")',
+  A9: 'Total',
   B9: '=SUM(B2:B7)',
   C9: '=SUM(C2:C7)',
-  A10: 'උපරිම',
+  A10: 'Maximum',
   B10: '=MAX(B2:B7)',
   C10: '=MAX(C2:C7)',
-  A11: 'අවම',
+  A11: 'Minimum',
   B11: '=MIN(B2:B7)',
   C11: '=MIN(C2:C7)',
-  A12: 'සමත් ගණන',
+  A12: 'Passed',
   B12: '=COUNTIF(E2:E7,">=50")',
 }
 
 const DEFAULT_BOOK = {
   sheets: [
-    { name: 'ලකුණු', cells: SEED, fmt: {} },
-    { name: 'පත්‍රය 2', cells: {}, fmt: {} },
+    { name: 'Marks', cells: SEED, fmt: {} },
+    { name: 'Sheet2', cells: {}, fmt: {} },
   ],
   active: 0,
 }
 
 const TABS = [
-  { id: 'home', label: 'මුල් පිටුව' },
-  { id: 'insert', label: 'ඇතුළු කරන්න' },
-  { id: 'formulas', label: 'සූත්‍ර' },
-  { id: 'data', label: 'දත්ත' },
-  { id: 'view', label: 'දර්ශනය' },
+  { id: 'home', label: 'Home' },
+  { id: 'insert', label: 'Insert' },
+  { id: 'formulas', label: 'Formulas' },
+  { id: 'data', label: 'Data' },
+  { id: 'view', label: 'View' },
 ]
 
 const NUM_OPTS = [
-  { value: 'auto', label: 'ස්වයංක්‍රීය' },
-  { value: 'int', label: 'සංඛ්‍යාව' },
-  { value: 'cur', label: 'මුදල්' },
-  { value: 'pct', label: 'ප්‍රතිශතය' },
-  { value: 'dec2', label: 'දශම 2' },
+  { value: 'auto', label: 'General' },
+  { value: 'int', label: 'Number' },
+  { value: 'cur', label: 'Currency' },
+  { value: 'pct', label: 'Percentage' },
+  { value: 'dec2', label: 'Decimal' },
 ]
 
 /* ------------------------------ ප්‍රස්තාරය ------------------------------ */
@@ -298,7 +298,7 @@ function Chart({ type, data, title }) {
   if (!data.length) {
     return (
       <div className="grid h-28 place-items-center rounded border border-dashed border-slate-300 text-[10.5px] text-slate-400">
-        ප්‍රස්තාරයට සංඛ්‍යා ඇතුළත් කරන්න
+        Add numbers to the chart range
       </div>
     )
   }
@@ -417,7 +417,7 @@ export function SheetLab() {
       const list = Array.isArray(b.sheets) && b.sheets.length ? b.sheets : DEFAULT_BOOK.sheets
       const idx = Math.min(Math.max(0, Number(b.active) || 0), list.length - 1)
       const copy = list.slice()
-      copy[idx] = fn(copy[idx] || { name: 'පත්‍රය', cells: {}, fmt: {} })
+      copy[idx] = fn(copy[idx] || { name: 'Sheet', cells: {}, fmt: {} })
       return { ...b, sheets: copy, active: idx }
     })
   }
@@ -533,7 +533,7 @@ export function SheetLab() {
   const addSheet = () =>
     setBook((b) => {
       const list = Array.isArray(b.sheets) && b.sheets.length ? b.sheets : DEFAULT_BOOK.sheets
-      return { ...b, sheets: [...list, { name: `පත්‍රය ${list.length + 1}`, cells: {}, fmt: {} }], active: list.length }
+      return { ...b, sheets: [...list, { name: `Sheet${list.length + 1}`, cells: {}, fmt: {} }], active: list.length }
     })
 
   const removeSheet = () =>
@@ -570,68 +570,68 @@ export function SheetLab() {
 
   return (
     <WinWindow>
-      <TitleBar badge="X" color="#217346" file="ශිෂ්‍ය ලකුණු.xlsx" app="Excel" saving="සුරකින ලදී" />
-      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="Enter = පහළට · Tab = දකුණට" />
+      <TitleBar badge="X" color="#217346" file="ශිෂ්‍ය ලකුණු.xlsx" app="Excel" saving="Saved" />
+      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="Enter = move down · Tab = move right" />
       <RibbonBar>
         {tab === 'home' ? (
           <>
-            <RibbonGroup label="ෆොන්ට්">
-              <RBtn icon="B" active={selStyle.bold} onClick={() => toggleStyle('bold')} className="font-bold" />
-              <RBtn icon="I" active={selStyle.italic} onClick={() => toggleStyle('italic')} className="italic" />
-              <RBtn icon="🪣" label="පසුබිම" active={selStyle.fill} onClick={() => toggleStyle('fill')} />
+            <RibbonGroup label="Font">
+              <RBtn icon="B" active={selStyle.bold} onClick={() => toggleStyle('bold')} title="Bold" className="font-bold" />
+              <RBtn icon="I" active={selStyle.italic} onClick={() => toggleStyle('italic')} title="Italic" className="italic" />
+              <RBtn icon="🪣" label="Fill Color" active={selStyle.fill} onClick={() => toggleStyle('fill')} />
             </RibbonGroup>
-            <RibbonGroup label="පෙළගැස්ම">
-              <RBtn icon="⇤" active={selStyle.align === 'left'} onClick={() => setStyle('align', 'left')} title="වමට" />
-              <RBtn icon="⇔" active={selStyle.align === 'center'} onClick={() => setStyle('align', 'center')} title="මැදට" />
-              <RBtn icon="⇥" active={selStyle.align === 'right'} onClick={() => setStyle('align', 'right')} title="දකුණට" />
+            <RibbonGroup label="Alignment">
+              <RBtn icon="⇤" active={selStyle.align === 'left'} onClick={() => setStyle('align', 'left')} title="Align Left" />
+              <RBtn icon="⇔" active={selStyle.align === 'center'} onClick={() => setStyle('align', 'center')} title="Center" />
+              <RBtn icon="⇥" active={selStyle.align === 'right'} onClick={() => setStyle('align', 'right')} title="Align Right" />
             </RibbonGroup>
-            <RibbonGroup label="සංඛ්‍යා ආකෘතිය">
+            <RibbonGroup label="Number">
               <RSelect
                 value={selStyle.num || 'auto'}
                 onChange={(v) => setStyle('num', v === 'auto' ? undefined : v)}
                 options={NUM_OPTS}
-                label="ආකෘතිය"
+                label="Number Format"
               />
-              <RBtn icon="රු." label="මුදල්" onClick={() => setStyle('num', 'cur')} />
-              <RBtn icon="%" label="ප්‍රතිශත" onClick={() => setStyle('num', 'pct')} />
+              <RBtn icon="Rs." label="Currency" onClick={() => setStyle('num', 'cur')} />
+              <RBtn icon="%" label="Percent" onClick={() => setStyle('num', 'pct')} />
             </RibbonGroup>
-            <RibbonGroup label="සෛල">
-              <RBtn icon="Σ" label="ස්වයං එකතුව" onClick={autoSum} title="Alt + =" />
+            <RibbonGroup label="Cells">
+              <RBtn icon="Σ" label="AutoSum" onClick={autoSum} title="Alt + =" />
               <RBtn
                 icon="⌫"
-                label="ඉවත් කරන්න"
+                label="Clear"
                 onClick={() => {
                   writeCell(sel, '')
                   setDraft('')
                 }}
               />
             </RibbonGroup>
-            <RibbonGroup label="සංස්කරණය">
-              <RBtn icon="A→Z" label="ආරෝහණ" onClick={() => sortBy('asc')} />
-              <RBtn icon="Z→A" label="අවරෝහණ" onClick={() => sortBy('desc')} />
+            <RibbonGroup label="Editing">
+              <RBtn icon="A→Z" label="Sort A to Z" onClick={() => sortBy('asc')} />
+              <RBtn icon="Z→A" label="Sort Z to A" onClick={() => sortBy('desc')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'insert' ? (
           <>
-            <RibbonGroup label="ප්‍රස්තාරය">
+            <RibbonGroup label="Charts">
               <RSelect
                 value={chartType}
                 onChange={setChartType}
                 options={[
-                  { value: 'bar', label: 'තීරු' },
-                  { value: 'line', label: 'රේඛා' },
-                  { value: 'pie', label: 'පයි' },
+                  { value: 'bar', label: 'Column' },
+                  { value: 'line', label: 'Line' },
+                  { value: 'pie', label: 'Pie' },
                 ]}
-                label="වර්ගය"
+                label="Chart Type"
               />
-              <RBtn icon="📊" label="ප්‍රස්තාරය" active={showChart} onClick={() => setShowChart((v) => !v)} />
+              <RBtn icon="📊" label="Chart" active={showChart} onClick={() => setShowChart((v) => !v)} />
             </RibbonGroup>
-            <RibbonGroup label="වගුව">
+            <RibbonGroup label="Table">
               <RBtn
                 icon="▦"
-                label="ශීර්ෂ පේළිය"
+                label="Header Row"
                 onClick={() =>
                   updateActive((s) => {
                     const f = { ...(s.fmt || {}) }
@@ -644,26 +644,26 @@ export function SheetLab() {
                 }
               />
             </RibbonGroup>
-            <RibbonGroup label="පත්‍රිකා">
-              <RBtn icon="＋" label="නව පත්‍රය" onClick={addSheet} />
+            <RibbonGroup label="Sheets">
+              <RBtn icon="＋" label="New Sheet" onClick={addSheet} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'formulas' ? (
           <>
-            <RibbonGroup label="ස්වයංක්‍රීය">
-              <RBtn icon="Σ" label="එකතුව" onClick={autoSum} />
-              <RBtn icon="fx" label="ශ්‍රිතය" onClick={() => insertFn('IF')} />
+            <RibbonGroup label="AutoSum">
+              <RBtn icon="Σ" label="Sum" onClick={autoSum} />
+              <RBtn icon="fx" label="Function" onClick={() => insertFn('IF')} />
             </RibbonGroup>
-            <RibbonGroup label="ගණිත">
+            <RibbonGroup label="Math &amp; Trig">
               <RBtn icon="Σ" label="SUM" onClick={() => insertFn('SUM')} />
               <RBtn icon="x̄" label="AVERAGE" onClick={() => insertFn('AVERAGE')} />
               <RBtn icon="↑" label="MAX" onClick={() => insertFn('MAX')} />
               <RBtn icon="↓" label="MIN" onClick={() => insertFn('MIN')} />
               <RBtn icon="#" label="COUNT" onClick={() => insertFn('COUNT')} />
             </RibbonGroup>
-            <RibbonGroup label="තර්ක">
+            <RibbonGroup label="Logical">
               <RBtn icon="?" label="IF" onClick={() => insertFn('IF')} />
               <RBtn icon="∑?" label="COUNTIF" onClick={() => insertFn('COUNTIF')} />
               <RBtn icon="0.0" label="ROUND" onClick={() => insertFn('ROUND')} />
@@ -673,29 +673,29 @@ export function SheetLab() {
 
         {tab === 'data' ? (
           <>
-            <RibbonGroup label="වර්ග කිරීම">
-              <RBtn icon="A→Z" label="ආරෝහණ" onClick={() => sortBy('asc')} />
-              <RBtn icon="Z→A" label="අවරෝහණ" onClick={() => sortBy('desc')} />
+            <RibbonGroup label="Sort">
+              <RBtn icon="A→Z" label="Sort A to Z" onClick={() => sortBy('asc')} />
+              <RBtn icon="Z→A" label="Sort Z to A" onClick={() => sortBy('desc')} />
             </RibbonGroup>
-            <RibbonGroup label="පෙරහන">
+            <RibbonGroup label="Filter">
               <input
                 value={filter}
                 onChange={(e) => setFilter(e.target.value)}
-                placeholder="අගයක් සොයන්න…"
-                aria-label="පෙරහන් අගය"
+                placeholder="Search values…"
+                aria-label="Filter value"
                 className="h-[22px] w-[120px] rounded border border-slate-300 px-1.5 text-[10px] leading-tight outline-none focus:border-[#217346]"
               />
-              <RBtn icon="✕" label="ඉවත්" onClick={() => setFilter('')} />
+              <RBtn icon="✕" label="Clear" onClick={() => setFilter('')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'view' ? (
           <>
-            <RibbonGroup label="පෙන්වීම">
-              <RBtn icon="▦" label="ජාල රේඛා" active={grid} onClick={() => setGrid((v) => !v)} />
-              <RBtn icon="A1" label="ශීර්ෂ" active={headings} onClick={() => setHeadings((v) => !v)} />
-              <RBtn icon="📊" label="ප්‍රස්තාරය" active={showChart} onClick={() => setShowChart((v) => !v)} />
+            <RibbonGroup label="Show">
+              <RBtn icon="▦" label="Gridlines" active={grid} onClick={() => setGrid((v) => !v)} />
+              <RBtn icon="A1" label="Headings" active={headings} onClick={() => setHeadings((v) => !v)} />
+              <RBtn icon="📊" label="Chart" active={showChart} onClick={() => setShowChart((v) => !v)} />
             </RibbonGroup>
           </>
         ) : null}
@@ -711,7 +711,7 @@ export function SheetLab() {
               jump(goto)
             }
           }}
-          aria-label="සෛල ලිපිනය"
+          aria-label="Name Box"
           className="h-[20px] w-[52px] rounded border border-slate-300 px-1 text-center font-mono text-[10px] font-bold leading-tight text-slate-700 outline-none focus:border-[#217346]"
         />
         <span className="shrink-0 px-0.5 font-serif text-[10px] italic leading-none text-slate-400">fx</span>
@@ -720,8 +720,8 @@ export function SheetLab() {
           onChange={(e) => setDraft(e.target.value)}
           onKeyDown={onKey}
           onBlur={() => commit(draft)}
-          aria-label="සූත්‍ර තීරුව"
-          placeholder="අගය හෝ =SUM(B2:B7)"
+          aria-label="Formula Bar"
+          placeholder="Enter a value or =SUM(B2:B7)"
           className="h-[20px] min-w-0 flex-1 rounded border border-slate-300 px-1.5 font-mono text-[10.5px] leading-tight text-slate-800 outline-none focus:border-[#217346]"
         />
       </div>
@@ -730,12 +730,12 @@ export function SheetLab() {
         <div className="shrink-0 border-b border-slate-200 bg-white px-2 py-1">
           <div className="flex items-center justify-between">
             <span className="text-[9.5px] font-bold text-slate-500">
-              ප්‍රස්තාරය — {sel.replace(/\d+/g, '')} තීරුව
+              Chart — Column {sel.replace(/\d+/g, '')}
             </span>
             <button
               type="button"
               onClick={() => setShowChart(false)}
-              aria-label="ප්‍රස්තාරය වසන්න"
+              aria-label="Close chart"
               className="text-[10px] leading-none text-slate-400 hover:text-red-500"
             >
               ✕
@@ -797,7 +797,7 @@ export function SheetLab() {
                           onChange={(e) => setDraft(e.target.value)}
                           onKeyDown={onKey}
                           onBlur={() => commit(draft)}
-                          aria-label={`${key} සෛලය`}
+                          aria-label={`${key} cell`}
                           className="block h-[21px] w-full border-2 border-[#217346] bg-white px-1 text-[10.5px] leading-none text-slate-900 outline-none"
                         />
                       ) : (
@@ -839,7 +839,7 @@ export function SheetLab() {
         <button
           type="button"
           onClick={addSheet}
-          aria-label="නව පත්‍රයක්"
+          aria-label="New sheet"
           className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-slate-300 bg-white text-[9px] leading-none text-slate-500"
         >
           +
@@ -847,20 +847,20 @@ export function SheetLab() {
         <button
           type="button"
           onClick={removeSheet}
-          aria-label="පත්‍රය මකන්න"
+          aria-label="Delete sheet"
           className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-slate-300 bg-white text-[8px] leading-none text-slate-500"
         >
           ✕
         </button>
         <span className="ml-2 shrink-0 text-[9px] leading-none text-slate-400">
-          {filter ? `පෙරහන: ${filter}` : `${visibleRows.length} පේළි`}
+          {filter ? `Filter: ${filter}` : `${visibleRows.length} rows`}
         </span>
       </div>
 
       <StatusBar
-        left="සූදානම්"
-        center={`සෛලය: ${sel}`}
-        right={`අගය: ${displayValue(sel, cells, fmtMap) || '—'}`}
+        left="Ready"
+        center={`Cell: ${sel}`}
+        right={`Value: ${displayValue(sel, cells, fmtMap) || '—'}`}
       />
     </WinWindow>
   )

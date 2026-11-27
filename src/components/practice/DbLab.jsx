@@ -24,10 +24,10 @@ const SEED = [
 ]
 
 const FIELDS = [
-  { id: 'name', label: 'නම' },
-  { id: 'grade', label: 'ශ්‍රේණිය' },
-  { id: 'marks', label: 'ලකුණු' },
-  { id: 'city', label: 'නගරය' },
+  { id: 'name', label: 'Name' },
+  { id: 'grade', label: 'Grade' },
+  { id: 'marks', label: 'Marks' },
+  { id: 'city', label: 'City' },
 ]
 
 const DEFAULT_QUERY = {
@@ -40,15 +40,15 @@ const DEFAULT_QUERY = {
 }
 
 const OBJECTS = [
-  { group: 'වගු', items: [{ id: 'students', label: 'Students', icon: '▦' }] },
-  { group: 'විමසුම්', items: [{ id: 'query', label: 'qryStudents', icon: '🔎' }] },
-  { group: 'වාර්තා', items: [{ id: 'report', label: 'rptMarks', icon: '📄' }] },
+  { group: 'Tables', items: [{ id: 'students', label: 'Students', icon: '▦' }] },
+  { group: 'Queries', items: [{ id: 'query', label: 'qryStudents', icon: '🔎' }] },
+  { group: 'Reports', items: [{ id: 'report', label: 'rptMarks', icon: '📄' }] },
 ]
 
 const TABS = [
-  { id: 'home', label: 'මුල් පිටුව' },
-  { id: 'create', label: 'සාදන්න' },
-  { id: 'tools', label: 'දත්ත සමුදා මෙවලම්' },
+  { id: 'home', label: 'Home' },
+  { id: 'create', label: 'Create' },
+  { id: 'tools', label: 'Database Tools' },
 ]
 
 function matches(value, criteria) {
@@ -135,7 +135,7 @@ export function DbLab() {
       ...d,
       records: [
         ...(Array.isArray(d.records) && d.records.length ? d.records : SEED),
-        { id: nextId, name: 'නව සිසුවා', grade: 9, marks: 0, city: '' },
+        { id: nextId, name: 'New Student', grade: 9, marks: 0, city: '' },
       ],
     }))
     setSelectedId(nextId)
@@ -218,58 +218,58 @@ export function DbLab() {
 
   return (
     <WinWindow>
-      <TitleBar badge="A" color="#a4373a" file="ශිෂ්‍ය දත්ත.accdb" app="Access" saving="සුරකින ලදී" />
-      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="F5 = විමසුම ධාවනය" />
+      <TitleBar badge="A" color="#a4373a" file="ශිෂ්‍ය දත්ත.accdb" app="Access" saving="Saved" />
+      <RibbonTabs tabs={TABS} active={tab} onChange={setTab} hint="F5 = run query" />
       <RibbonBar>
         {tab === 'home' ? (
           <>
-            <RibbonGroup label="දර්ශනය">
-              <RBtn icon="▦" label="වගු දත්ත" active={object === 'students'} onClick={() => goObject('students')} />
-              <RBtn icon="🔎" label="විමසුම" active={object === 'query'} onClick={() => goObject('query')} />
-              <RBtn icon="📄" label="වාර්තාව" active={object === 'report'} onClick={() => goObject('report')} />
+            <RibbonGroup label="Views">
+              <RBtn icon="▦" label="Datasheet" active={object === 'students'} onClick={() => goObject('students')} />
+              <RBtn icon="🔎" label="Query" active={object === 'query'} onClick={() => goObject('query')} />
+              <RBtn icon="📄" label="Report" active={object === 'report'} onClick={() => goObject('report')} />
             </RibbonGroup>
-            <RibbonGroup label="විමසුම">
-              <RBtn icon="▤" label="සැලසුම" active={queryView === 'design'} onClick={() => setQueryView('design')} />
-              <RBtn icon="!" label="ධාවනය" onClick={() => { setObject('query'); setQueryView('results') }} />
+            <RibbonGroup label="Query">
+              <RBtn icon="▤" label="Design" active={queryView === 'design'} onClick={() => setQueryView('design')} />
+              <RBtn icon="!" label="Run" onClick={() => { setObject('query'); setQueryView('results') }} />
               <RBtn icon="SQL" label="SQL" active={queryView === 'sql'} onClick={() => { setObject('query'); setQueryView('sql') }} />
             </RibbonGroup>
-            <RibbonGroup label="වාර්තා">
-              <RBtn icon="＋" label="නව වාර්තාව" onClick={addRecord} />
-              <RBtn icon="🗑" label="මකන්න" onClick={deleteRecord} />
-              <RBtn icon="💾" label="සුරකින්න" onClick={() => patchDb({})} />
+            <RibbonGroup label="Records">
+              <RBtn icon="＋" label="New Record" onClick={addRecord} />
+              <RBtn icon="🗑" label="Delete" onClick={deleteRecord} />
+              <RBtn icon="💾" label="Save" onClick={() => patchDb({})} />
             </RibbonGroup>
-            <RibbonGroup label="පෙරහන">
-              <RBtn icon="⏷" label="පෙරහන" onClick={() => setSearch('')} />
+            <RibbonGroup label="Find">
+              <RBtn icon="⏷" label="Filter" onClick={() => setSearch('')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'create' ? (
           <>
-            <RibbonGroup label="වගු">
-              <RBtn icon="▦" label="වගුව" onClick={() => goObject('students')} />
-              <RBtn icon="📋" label="වගු සැලසුම" onClick={() => goObject('students')} />
+            <RibbonGroup label="Tables">
+              <RBtn icon="▦" label="Table" onClick={() => goObject('students')} />
+              <RBtn icon="📋" label="Table Design" onClick={() => goObject('students')} />
             </RibbonGroup>
-            <RibbonGroup label="විමසුම්">
-              <RBtn icon="🔎" label="විමසුම් සැලසුම" onClick={() => { setObject('query'); setQueryView('design') }} />
-              <RBtn icon="!" label="විමසුම් ධාවනය" onClick={() => { setObject('query'); setQueryView('results') }} />
+            <RibbonGroup label="Queries">
+              <RBtn icon="🔎" label="Query Design" onClick={() => { setObject('query'); setQueryView('design') }} />
+              <RBtn icon="!" label="Run Query" onClick={() => { setObject('query'); setQueryView('results') }} />
             </RibbonGroup>
-            <RibbonGroup label="වාර්තා">
-              <RBtn icon="📄" label="වාර්තා විශ්ලේෂකය" onClick={() => setObject('report')} />
-              <RBtn icon="🖨" label="මුද්‍රණ පෙරදසුන" onClick={() => setObject('report')} />
+            <RibbonGroup label="Reports">
+              <RBtn icon="📄" label="Report" onClick={() => setObject('report')} />
+              <RBtn icon="🖨" label="Print Preview" onClick={() => setObject('report')} />
             </RibbonGroup>
           </>
         ) : null}
 
         {tab === 'tools' ? (
           <>
-            <RibbonGroup label="දත්ත සමුදා මෙවලම්">
-              <RBtn icon="🔗" label="සම්බන්ධතා" onClick={() => setObject('students')} />
-              <RBtn icon="📦" label="සම්පීඩනය" onClick={() => patchDb({})} />
-              <RBtn icon="🔒" label="ආරක්ෂාව" disabled />
+            <RibbonGroup label="Database Tools">
+              <RBtn icon="🔗" label="Relationships" onClick={() => setObject('students')} />
+              <RBtn icon="📦" label="Compact and Repair" onClick={() => patchDb({})} />
+              <RBtn icon="🔒" label="Security" disabled />
             </RibbonGroup>
-            <RibbonGroup label="මුද්‍රණය">
-              <RBtn icon="🖨" label="වාර්තාව" onClick={() => setObject('report')} />
+            <RibbonGroup label="Printing">
+              <RBtn icon="🖨" label="Report" onClick={() => setObject('report')} />
             </RibbonGroup>
           </>
         ) : null}
@@ -278,7 +278,7 @@ export function DbLab() {
       <div className="flex min-h-0 flex-1 overflow-hidden">
         <div className="win-scroll hidden w-[120px] shrink-0 overflow-y-auto border-r border-slate-300 bg-[#f3f3f3] p-1 sm:block">
           <div className="mb-1 flex items-center justify-between px-1">
-            <span className="text-[8.5px] font-bold uppercase tracking-wide text-slate-400">සියලු වස්තු</span>
+            <span className="text-[8.5px] font-bold uppercase tracking-wide text-slate-400">All Access Objects</span>
             <span className="text-[9px] text-slate-400">▾</span>
           </div>
           {OBJECTS.map((g) => (
@@ -337,17 +337,17 @@ export function DbLab() {
               <div className="text-center">
                 <div className="text-[13px] font-extrabold leading-tight">ශිෂ්‍ය ලකුණු වාර්තාව</div>
                 <div className="text-[8.5px] text-slate-500">
-                  Students වගුව · {new Date().toLocaleDateString('en-GB')} · Access Report
+                  Students table · {new Date().toLocaleDateString('en-GB')} · Access Report
                 </div>
               </div>
               <table className="mt-3 w-full border-collapse text-[9.5px]">
                 <thead>
                   <tr className="bg-slate-100 text-left text-slate-600">
                     <th className="border border-slate-300 px-1 py-0.5">ID</th>
-                    <th className="border border-slate-300 px-1 py-0.5">නම</th>
-                    <th className="border border-slate-300 px-1 py-0.5">ශ්‍රේණිය</th>
-                    <th className="border border-slate-300 px-1 py-0.5">ලකුණු</th>
-                    <th className="border border-slate-300 px-1 py-0.5">නගරය</th>
+                    <th className="border border-slate-300 px-1 py-0.5">Name</th>
+                    <th className="border border-slate-300 px-1 py-0.5">Grade</th>
+                    <th className="border border-slate-300 px-1 py-0.5">Marks</th>
+                    <th className="border border-slate-300 px-1 py-0.5">City</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -363,11 +363,11 @@ export function DbLab() {
                 </tbody>
               </table>
               <div className="mt-2 flex justify-between border-t border-slate-300 pt-1 text-[8.5px] text-slate-600">
-                <span>වාර්තා: {records.length}</span>
-                <span>සාමාන්‍යය: {avgMarks.toFixed(1)}</span>
-                <span>උපරිම: {maxMarks}</span>
+                <span>Records: {records.length}</span>
+                <span>Average: {avgMarks.toFixed(1)}</span>
+                <span>Maximum: {maxMarks}</span>
               </div>
-              <div className="mt-2 text-right text-[8px] text-slate-400">පිටුව 1 / 1</div>
+              <div className="mt-2 text-right text-[8px] text-slate-400">Page 1 of 1</div>
             </div>
           ) : (
             <div className="overflow-hidden rounded-sm bg-white shadow ring-1 ring-slate-300">
@@ -383,7 +383,7 @@ export function DbLab() {
                         queryView === v ? 'bg-white font-semibold text-[#7c2b2e] ring-1 ring-slate-300' : 'text-slate-500 hover:bg-slate-200'
                       }`}
                     >
-                      {v === 'design' ? 'සැලසුම' : v === 'sql' ? 'SQL' : 'ප්‍රතිඵල'}
+                      {v === 'design' ? 'Design' : v === 'sql' ? 'SQL' : 'Results'}
                     </button>
                   ))}
                   <span className="ml-auto text-[8.5px] text-slate-400">View: Datasheet</span>
@@ -396,14 +396,14 @@ export function DbLab() {
                     <tbody>
                       <tr>
                         <th className="w-[68px] border border-slate-300 bg-[#f3f3f3] px-1 py-1 text-left font-semibold text-slate-500">
-                          ක්ෂේත්‍රය
+                          Field
                         </th>
                         {query.cols.map((c, i) => (
                           <td key={i} className="border border-slate-300 bg-white p-0">
                             <select
                               value={c.field}
                               onChange={(e) => patchCol(i, { field: e.target.value })}
-                              aria-label={`ක්ෂේත්‍රය ${i + 1}`}
+                              aria-label={`Field ${i + 1}`}
                               className="w-full bg-transparent px-1 py-0.5 text-[9.5px] leading-tight outline-none"
                             >
                               {FIELDS.map((f) => (
@@ -417,7 +417,7 @@ export function DbLab() {
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-[#f3f3f3] px-1 py-1 text-left font-semibold text-slate-500">
-                          වගුව
+                          Table
                         </th>
                         {query.cols.map((c, i) => (
                           <td key={i} className="border border-slate-300 bg-[#f8f9fa] px-1 py-0.5 text-slate-500">
@@ -427,26 +427,26 @@ export function DbLab() {
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-[#f3f3f3] px-1 py-1 text-left font-semibold text-slate-500">
-                          වර්ගය
+                          Sort
                         </th>
                         {query.cols.map((c, i) => (
                           <td key={i} className="border border-slate-300 bg-white p-0">
                             <select
                               value={c.sort}
                               onChange={(e) => patchCol(i, { sort: e.target.value })}
-                              aria-label={`වර්ගය ${i + 1}`}
+                              aria-label={`Sort ${i + 1}`}
                               className="w-full bg-transparent px-1 py-0.5 text-[9.5px] leading-tight outline-none"
                             >
                               <option value="">—</option>
-                              <option value="asc">ආරෝහණ</option>
-                              <option value="desc">අවරෝහණ</option>
+                              <option value="asc">Ascending</option>
+                              <option value="desc">Descending</option>
                             </select>
                           </td>
                         ))}
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-[#f3f3f3] px-1 py-1 text-left font-semibold text-slate-500">
-                          පෙන්වන්න
+                          Show
                         </th>
                         {query.cols.map((c, i) => (
                           <td key={i} className="border border-slate-300 bg-white px-1 py-0.5 text-center">
@@ -454,7 +454,7 @@ export function DbLab() {
                               type="checkbox"
                               checked={Boolean(c.show)}
                               onChange={(e) => patchCol(i, { show: e.target.checked })}
-                              aria-label={`පෙන්වන්න ${i + 1}`}
+                              aria-label={`Show ${i + 1}`}
                               className="h-3 w-3 accent-[#a4373a]"
                             />
                           </td>
@@ -462,15 +462,15 @@ export function DbLab() {
                       </tr>
                       <tr>
                         <th className="border border-slate-300 bg-[#f3f3f3] px-1 py-1 text-left font-semibold text-slate-500">
-                          කොන්දේසිය
+                          Criteria
                         </th>
                         {query.cols.map((c, i) => (
                           <td key={i} className="border border-slate-300 bg-white p-0">
                             <input
                               value={c.criteria}
                               onChange={(e) => patchCol(i, { criteria: e.target.value })}
-                              placeholder=">75, 10, කොළඹ"
-                              aria-label={`කොන්දේසිය ${i + 1}`}
+                              placeholder={">75, 10, “කොළඹ”"}
+                              aria-label={`Criteria ${i + 1}`}
                               className="w-full px-1 py-0.5 text-[9.5px] leading-tight outline-none"
                             />
                           </td>
@@ -479,9 +479,9 @@ export function DbLab() {
                     </tbody>
                   </table>
                   <p className="mt-1.5 px-1 text-[8.5px] leading-snug text-slate-500">
-                    කොන්දේසි උදාහරණ: <span className="font-mono">&gt;75</span>, <span className="font-mono">10</span>,{' '}
-                    <span className="font-mono">&quot;කොළඹ&quot;</span>, <span className="font-mono">Between 60 And 80</span> වෙනුවට{' '}
-                    <span className="font-mono">&gt;=60</span>.
+                    Criteria examples: <span className="font-mono">&gt;75</span>, <span className="font-mono">10</span>,{' '}
+                    <span className="font-mono">&quot;කොළඹ&quot;</span>. Use <span className="font-mono">&gt;=60</span>{' '}
+                    instead of <span className="font-mono">Between 60 And 80</span>.
                   </p>
                 </div>
               ) : object === 'query' && queryView === 'sql' ? (
@@ -523,7 +523,7 @@ export function DbLab() {
                               <input
                                 value={r.name}
                                 onChange={(e) => updateRecord(r.id, { name: e.target.value })}
-                                aria-label={`${r.id} නම`}
+                                aria-label={`${r.id} name`}
                                 className="w-full bg-transparent px-1 py-[2px] text-[9.5px] leading-tight outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-[#a4373a]"
                               />
                             </td>
@@ -531,7 +531,7 @@ export function DbLab() {
                               <select
                                 value={r.grade}
                                 onChange={(e) => updateRecord(r.id, { grade: Number(e.target.value) })}
-                                aria-label={`${r.id} ශ්‍රේණිය`}
+                                aria-label={`${r.id} grade`}
                                 className="w-full bg-transparent px-0.5 py-[2px] text-[9.5px] leading-tight outline-none focus:bg-white"
                               >
                                 <option value={9}>9</option>
@@ -544,7 +544,7 @@ export function DbLab() {
                                 value={r.marks}
                                 onChange={(e) => updateRecord(r.id, { marks: e.target.value === '' ? '' : Number(e.target.value) })}
                                 inputMode="numeric"
-                                aria-label={`${r.id} ලකුණු`}
+                                aria-label={`${r.id} marks`}
                                 className="w-full bg-transparent px-1 py-[2px] font-mono text-[9.5px] leading-tight outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-[#a4373a]"
                               />
                             </td>
@@ -552,7 +552,7 @@ export function DbLab() {
                               <input
                                 value={r.city}
                                 onChange={(e) => updateRecord(r.id, { city: e.target.value })}
-                                aria-label={`${r.id} නගරය`}
+                                aria-label={`${r.id} city`}
                                 className="w-full bg-transparent px-1 py-[2px] text-[9.5px] leading-tight outline-none focus:bg-white focus:ring-1 focus:ring-inset focus:ring-[#a4373a]"
                               />
                             </td>
@@ -562,7 +562,7 @@ export function DbLab() {
                       {shown.length === 0 ? (
                         <tr>
                           <td colSpan={6} className="border border-slate-200 px-2 py-2 text-center text-[9.5px] text-slate-400">
-                            ගැලපෙන වාර්තා නැත
+                            No matching records
                           </td>
                         </tr>
                       ) : null}
@@ -576,27 +576,27 @@ export function DbLab() {
       </div>
 
       <div className="flex shrink-0 flex-wrap items-center gap-1 border-t border-slate-300 bg-[#f3f3f3] px-1.5 py-0.5 text-[9px] leading-none text-slate-600">
-        <button type="button" onClick={() => go(-999)} aria-label="පළමු වාර්තාව" className="px-1">
+        <button type="button" onClick={() => go(-999)} aria-label="First record" className="px-1">
           |◀
         </button>
-        <button type="button" onClick={() => go(-1)} aria-label="පෙර වාර්තාව" className="px-1">
+        <button type="button" onClick={() => go(-1)} aria-label="Previous record" className="px-1">
           ◀
         </button>
         <span className="rounded border border-slate-300 bg-white px-1.5 py-[1px]">
-          වාර්තාව {shown.length ? Math.max(0, currentIdx) + 1 : 0} / {shown.length}
+          Record {shown.length ? Math.max(0, currentIdx) + 1 : 0} of {shown.length}
         </span>
-        <button type="button" onClick={() => go(1)} aria-label="ඊළඟ වාර්තාව" className="px-1">
+        <button type="button" onClick={() => go(1)} aria-label="Next record" className="px-1">
           ▶
         </button>
-        <button type="button" onClick={() => go(999)} aria-label="අවසන් වාර්තාව" className="px-1">
+        <button type="button" onClick={() => go(999)} aria-label="Last record" className="px-1">
           ▶|
         </button>
         <span className="mx-1 text-slate-300">|</span>
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="සොයන්න…"
-          aria-label="වාර්තා සොයන්න"
+          placeholder="Search…"
+          aria-label="Search records"
           className="h-[17px] w-[96px] rounded border border-slate-300 px-1 text-[9px] leading-tight outline-none focus:border-[#a4373a]"
         />
         <button
@@ -604,11 +604,11 @@ export function DbLab() {
           onClick={addRecord}
           className="ml-auto rounded border border-slate-300 bg-white px-1.5 py-[1px] text-[9px] leading-tight hover:bg-slate-50"
         >
-          ＋ නව වාර්තාව
+          ＋ New Record
         </button>
       </div>
 
-      <StatusBar left={`${shown.length} වාර්තා`} center="ප්‍රධාන යතුර: ID" right="Access · දත්ත පත්‍රිකා දර්ශනය" />
+      <StatusBar left={`${shown.length} records`} center="Primary Key: ID" right="Access · Datasheet View" />
     </WinWindow>
   )
 }

@@ -3,10 +3,10 @@ import { createContext, useContext, useEffect, useState } from 'react'
 /* Windows වැඩතලයේ හා කවුළු රාමුවේ පොදු කොටස් */
 
 export const WIN_APPS = [
-  { id: 'word', badge: 'W', color: '#2b579a', label: 'Word', sub: 'ලේඛන සැකසුම', icon: '📝' },
-  { id: 'excel', badge: 'X', color: '#217346', label: 'Excel', sub: 'විද්‍යුත් පැතුරුම්පත්', icon: '📊' },
-  { id: 'ppt', badge: 'P', color: '#c43e1c', label: 'PowerPoint', sub: 'ඉදිරිපත් කිරීම්', icon: '📽️' },
-  { id: 'access', badge: 'A', color: '#a4373a', label: 'Access', sub: 'දත්ත සමුදා', icon: '🗄️' },
+  { id: 'word', badge: 'W', color: '#2b579a', label: 'Word', sub: 'Word processing', icon: '📝' },
+  { id: 'excel', badge: 'X', color: '#217346', label: 'Excel', sub: 'Spreadsheets', icon: '📊' },
+  { id: 'ppt', badge: 'P', color: '#c43e1c', label: 'PowerPoint', sub: 'Presentations', icon: '📽️' },
+  { id: 'access', badge: 'A', color: '#a4373a', label: 'Access', sub: 'Database', icon: '🗄️' },
 ]
 
 const WinCtx = createContext(null)
@@ -113,14 +113,14 @@ export function WinDesktop({ app, onApp, children }) {
         </div>
       ) : (
         <div className="absolute inset-x-24 top-24 rounded-lg border border-white/20 bg-white/10 p-4 text-center text-white/80 backdrop-blur">
-          <p className="text-[12px] leading-relaxed">යෙදුම අවම කර ඇත. පහත කාර්ය තීරුවෙන් නැවත විවෘත කරන්න.</p>
+          <p className="text-[12px] leading-relaxed">App minimized. Open it again from the taskbar below.</p>
         </div>
       )}
 
       {start ? (
         <div className="absolute bottom-[48px] left-2 w-[252px] overflow-hidden rounded-xl border border-white/40 bg-white/95 shadow-2xl backdrop-blur">
           <div className="border-b border-slate-200 px-3 py-2 text-[9.5px] font-bold uppercase tracking-wide text-slate-400">
-            ආයුබෝවන් · සියලු මෘදුකාංග
+            All apps
           </div>
           <div className="grid gap-0.5 p-2">
             {WIN_APPS.map((a) => (
@@ -146,7 +146,7 @@ export function WinDesktop({ app, onApp, children }) {
             ))}
           </div>
           <div className="border-t border-slate-200 px-3 py-1.5 text-[9px] text-slate-400">
-            O/L තොරතුරු තාක්ෂණ පුහුණු වැඩතලය
+            O/L ICT practice desktop
           </div>
         </div>
       ) : null}
@@ -155,7 +155,7 @@ export function WinDesktop({ app, onApp, children }) {
         <button
           type="button"
           onClick={() => setStart((v) => !v)}
-          aria-label="ආරම්භක මෙනුව"
+          aria-label="Start"
           className={`grid h-8 w-8 shrink-0 place-items-center rounded transition hover:bg-white/15 ${
             start ? 'bg-white/20' : ''
           }`}
@@ -168,7 +168,7 @@ export function WinDesktop({ app, onApp, children }) {
           </span>
         </button>
         <div className="hidden h-7 w-40 items-center gap-1.5 rounded-full border border-white/15 bg-white/10 px-2.5 text-[10px] leading-none text-white/60 sm:flex">
-          <span aria-hidden="true">🔍</span> මෙහි සොයන්න
+          <span aria-hidden="true">🔍</span> Search here
         </div>
         <div className="mx-auto flex items-center gap-1">
           {WIN_APPS.map((a) => {
@@ -228,7 +228,7 @@ export function TitleBar({ badge, color, file, app, saving }) {
       {saving ? (
         <span
           className={`shrink-0 text-[8.5px] leading-none ${
-            saving === 'සුරකිමින්…' ? 'text-amber-600' : 'text-slate-400'
+            saving === 'Saving…' ? 'text-amber-600' : 'text-slate-400'
           }`}
         >
           {saving}
@@ -239,7 +239,7 @@ export function TitleBar({ badge, color, file, app, saving }) {
           <button
             type="button"
             onClick={win.minimize}
-            aria-label="අවම කරන්න"
+            aria-label="Minimize"
             className="grid w-9 place-items-center text-[11px] leading-none text-slate-500 transition hover:bg-slate-300/70"
           >
             —
@@ -247,7 +247,7 @@ export function TitleBar({ badge, color, file, app, saving }) {
           <button
             type="button"
             onClick={win.maximize}
-            aria-label="විශාල කරන්න"
+            aria-label="Maximize"
             className="grid w-9 place-items-center text-[10px] leading-none text-slate-500 transition hover:bg-slate-300/70"
           >
             ▢
@@ -255,7 +255,7 @@ export function TitleBar({ badge, color, file, app, saving }) {
           <button
             type="button"
             onClick={win.close}
-            aria-label="වසන්න"
+            aria-label="Close"
             className="grid w-9 place-items-center text-[10px] leading-none text-slate-500 transition hover:bg-[#e81123] hover:text-white"
           >
             ✕
